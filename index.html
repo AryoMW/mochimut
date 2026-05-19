@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Mochi - 10 TKJ 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-pink: #f8cdd6;
+            --dark-brown: #6b432a;
+            --light-bg: #fdf5f4;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-brown);
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--dark-brown);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 1rem;
+            border-bottom-left-radius: 50% 20%;
+            border-bottom-right-radius: 50% 20%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 100px;
+            height: 100px;
+            background-color: var(--primary-pink);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3.5rem;
+            margin: 0;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: bounceIn 1s cubic-bezier(0.28, 0.84, 0.42, 1);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            margin-top: 15px;
+            font-weight: 600;
+            color: var(--primary-pink);
+            animation: fadeIn 1.5s ease-in-out;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: var(--primary-pink);
+            color: var(--dark-brown);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 800;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            border: 2px dashed var(--dark-brown);
+            transform: rotate(-5deg);
+            animation: wiggle 2s infinite ease-in-out;
+        }
+
+        /* Menu Container */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Menu Items */
+        .menu-item {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(107, 67, 42, 0.1);
+            border-left: 5px solid var(--primary-pink);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s forwards;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 15px rgba(107, 67, 42, 0.2);
+            border-left: 5px solid var(--dark-brown);
+            background-color: var(--primary-pink);
+        }
+
+        .menu-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .menu-price {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            color: var(--dark-brown);
+            background: var(--primary-pink);
+            padding: 5px 12px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover .menu-price {
+            background: var(--dark-brown);
+            color: var(--white);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-pink);
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+            color: var(--dark-brown);
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #25D366;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .header-wa-container {
+            margin-top: 25px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        /* Animasi delay untuk setiap item menu agar muncul berurutan */
+        .menu-item:nth-child(1) { animation-delay: 0.1s; }
+        .menu-item:nth-child(2) { animation-delay: 0.2s; }
+        .menu-item:nth-child(3) { animation-delay: 0.3s; }
+        .menu-item:nth-child(4) { animation-delay: 0.4s; }
+        .menu-item:nth-child(5) { animation-delay: 0.5s; }
+        .menu-item:nth-child(6) { animation-delay: 0.6s; }
+        .menu-item:nth-child(7) { animation-delay: 0.7s; }
+        .menu-item:nth-child(8) { animation-delay: 0.8s; }
+        .menu-item:nth-child(9) { animation-delay: 0.9s; }
+        .menu-item:nth-child(10) { animation-delay: 1.0s; }
+        .menu-item:nth-child(11) { animation-delay: 1.1s; }
+        .menu-item:nth-child(12) { animation-delay: 1.2s; }
+        .menu-item:nth-child(13) { animation-delay: 1.3s; }
+        .menu-item:nth-child(14) { animation-delay: 1.4s; }
+        .menu-item:nth-child(15) { animation-delay: 1.5s; }
+        .menu-item:nth-child(16) { animation-delay: 1.6s; }
+        .menu-item:nth-child(17) { animation-delay: 1.7s; }
+        .menu-item:nth-child(n+18) { animation-delay: 1.8s; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Mochi Menu</h1>
+        <div class="subtitle">
+            <i class="fas fa-store"></i> Kami dari kelas <b>10 TKJ 2 (Ruang 20)</b> menghadirkan berbagai varian mochi premium!
+        </div>
+        <div class="badge">MENERIMA PESANAN</div>
+        
+        <div class="header-wa-container">
+            <a href="https://wa.me/6281977987330" target="_blank" class="whatsapp-btn">
+                <i class="fab fa-whatsapp"></i> Hubungi via WhatsApp
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="menu-grid">
+            <div class="menu-item">
+                <span class="menu-name">Strawberry Coklat</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Coklat Milo</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Coklat Keju</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Coklat Oreo</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Oreo Cream</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Oreo Red Velvet</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Coklat Crunchy</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Beng Beng Coklat</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Coklat Anggur</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Matcha</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Tiramisu</span>
+                <span class="menu-price">6k</span>
+            </div>
+
+            <div class="menu-item">
+                <span class="menu-name">Durian</span>
+                <span class="menu-price">9k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Blueberry Cream</span>
+                <span class="menu-price">9k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Strawberry Matcha</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Strawberry Redvelvet</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Strawberry Cream</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Strawberry Mangga</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Strawberry Cheesecake</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Blueberry Cheesecake</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Biscof Lotus</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Brownies Cream</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Cream Cheese</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Taro Cheese</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Cheese Crunchy</span>
+                <span class="menu-price">6k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Mochi Bites Coklat</span>
+                <span class="menu-price">8k</span>
+            </div>
+            <div class="menu-item">
+                <span class="menu-name">Mochi Bites Kacang Coklat</span>
+                <span class="menu-price">8k</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div>Yuk, pesan sekarang sebelum kehabisan!</div>
+        <a href="https://wa.me/6281977987330" target="_blank" class="whatsapp-btn">
+            <i class="fab fa-whatsapp"></i> +62 819-7798-7330
+        </a>
+    </footer>
+
+</body>
+</html>
