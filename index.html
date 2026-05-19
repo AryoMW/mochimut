@@ -361,6 +361,92 @@
             text-decoration: underline;
         }
 
+        /* ================= CUSTOM MODAL NOTIFIKASI ================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(107, 67, 42, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px 35px;
+            max-width: 380px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(107, 67, 42, 0.25);
+            border: 3px dashed var(--primary-pink);
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            display: block;
+            animation: bounceIn 0.6s ease;
+        }
+
+        .modal-icon.error { color: var(--red-stock); }
+        .modal-icon.warning { color: #f39c12; }
+        .modal-icon.info { color: var(--dark-brown); }
+
+        .modal-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            color: var(--dark-brown);
+            margin-bottom: 10px;
+        }
+
+        .modal-message {
+            font-size: 1rem;
+            color: #8b6b5c;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .modal-btn {
+            background: var(--dark-brown);
+            color: var(--white);
+            border: none;
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(107, 67, 42, 0.3);
+        }
+
+        .modal-btn:hover {
+            background: var(--primary-pink);
+            color: var(--dark-brown);
+            transform: scale(1.05);
+        }
+
+        /* Animations */
         @keyframes bounceIn {
             0% { transform: scale(0.3); opacity: 0; }
             50% { transform: scale(1.05); }
@@ -399,6 +485,16 @@
     </style>
 </head>
 <body>
+
+    <!-- CUSTOM MODAL -->
+    <div class="modal-overlay" id="customModal">
+        <div class="modal-box">
+            <div class="modal-icon" id="modalIcon">⚠️</div>
+            <div class="modal-title" id="modalTitle">Oops!</div>
+            <div class="modal-message" id="modalMessage">Pesan error di sini...</div>
+            <button class="modal-btn" onclick="tutupModal()">Oke, Mengerti</button>
+        </div>
+    </div>
 
     <header>
         <h1>MochiMut!</h1>
@@ -567,13 +663,56 @@
     </footer>
 
     <script>
+        // ================= CUSTOM MODAL FUNCTIONS =================
+        function tampilkanModal(judul, pesan, tipe = 'error') {
+            const modal = document.getElementById('customModal');
+            const icon = document.getElementById('modalIcon');
+            const title = document.getElementById('modalTitle');
+            const message = document.getElementById('modalMessage');
+
+            title.innerText = judul;
+            message.innerText = pesan;
+
+            // Reset class icon
+            icon.className = 'modal-icon';
+            
+            if (tipe === 'error') {
+                icon.innerHTML = '<i class="fas fa-times-circle"></i>';
+                icon.classList.add('error');
+            } else if (tipe === 'warning') {
+                icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                icon.classList.add('warning');
+            } else if (tipe === 'info') {
+                icon.innerHTML = '<i class="fas fa-info-circle"></i>';
+                icon.classList.add('info');
+            }
+
+            modal.classList.add('active');
+        }
+
+        function tutupModal() {
+            document.getElementById('customModal').classList.remove('active');
+        }
+
+        // Tutup modal kalau klik di luar box
+        document.getElementById('customModal').addEventListener('click', function(e) {
+            if (e.target === this) tutupModal();
+        });
+
+        // Tutup modal dengan tombol ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') tutupModal();
+        });
+
+        // ================= LOGIC FUNCTIONS =================
         function cekStok(input) {
             let qty = parseInt(input.value) || 0;
             const stokMaks = parseInt(input.getAttribute('data-stock'));
+            const nama = input.getAttribute('data-name');
             
             if (qty > stokMaks) {
                 input.value = stokMaks;
-                alert(`Stok ${input.getAttribute('data-name')} hanya tersedia ${stokMaks} pcs!`);
+                tampilkanModal('Stok Terbatas!', `Stok ${nama} hanya tersedia ${stokMaks} pcs. Jangan borong semua dong! 😅`, 'warning');
             }
             if (qty < 0) {
                 input.value = 0;
@@ -585,11 +724,12 @@
             const input = controller.querySelector('.menu-qty');
             let qtySekarang = parseInt(input.value) || 0;
             const stokMaks = parseInt(input.getAttribute('data-stock'));
+            const nama = input.getAttribute('data-name');
             
             qtySekarang += nilai;
             
             if (qtySekarang > stokMaks) {
-                alert(`Stok ${input.getAttribute('data-name')} hanya tersedia ${stokMaks} pcs!`);
+                tampilkanModal('Stok Habis!', `Stok ${nama} tinggal ${stokMaks} pcs. Maaf ya, gak bisa nambah lagi! 🥺`, 'error');
                 return;
             }
             if (qtySekarang < 0) qtySekarang = 0;
@@ -667,12 +807,12 @@
             });
 
             if (!adaPesanan) {
-                alert("Wah, kamu belum memilih mochi. Silakan klik tombol (+) pada menu terlebih dahulu!");
+                tampilkanModal('Keranjang Kosong!', 'Wah, kamu belum pilih mochi nih. Yuk klik tombol (+) dulu! 🍡', 'warning');
                 return;
             }
 
             if (!namaPemesan) {
-                alert("Tolong isi nama kamu dulu ya di atas, biar kami gampang catat pesanannya!");
+                tampilkanModal('Nama Belum Diisi!', 'Tolong isi nama kamu dulu ya, biar kami gampang catat pesanannya! ✏️', 'info');
                 document.getElementById('nama-pemesan').focus();
                 return;
             }
