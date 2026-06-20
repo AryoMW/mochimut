@@ -1,950 +1,650 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MochiMut! | 10 TKJ 2</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Optimized 3D Auto-Join Multiplayer</title>
     <style>
-        :root {
-            --primary-pink: #f8cdd6;
-            --dark-brown: #6b432a;
-            --light-bg: #fdf5f4;
-            --white: #ffffff;
-            --red-stock: #e74c3c;
-            --orange-soon: #f39c12;
-        }
+        html, body { margin: 0; height: 100%; overflow: hidden; background-color: #87CEEB; touch-action: none; overscroll-behavior: none; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--light-bg);
-            color: var(--dark-brown);
-        }
+        /* UI Overlay */
+        #ui { position: absolute; top: max(10px, env(safe-area-inset-top)); left: 10px; color: white; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; pointer-events: none; z-index: 10; }
+        #ui .hint { font-size: 12px; margin-top: 5px; opacity: 0.85; }
 
-        header {
-            background-color: var(--dark-brown);
-            color: var(--white);
-            text-align: center;
-            padding: 3rem 1rem;
-            border-bottom-left-radius: 50% 20%;
-            border-bottom-right-radius: 50% 20%;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        header::before {
-            content: '';
+        /* Control Zones */
+        #joystick-zone {
             position: absolute;
-            top: -50px;
-            left: -50px;
-            width: 100px;
-            height: 100px;
-            background-color: var(--primary-pink);
-            border-radius: 50%;
-            opacity: 0.5;
+            bottom: max(10%, env(safe-area-inset-bottom));
+            left: 5%;
+            width: 130px; height: 130px;
+            z-index: 5;
+            /* zone itself is invisible/oversized hit-area; visuals are separate so the
+               knob can be drawn at the exact touch point even near the zone edge */
         }
-
-        h1 {
-            font-family: 'Fredoka One', cursive;
-            font-size: 3.5rem;
-            margin: 0;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: bounceIn 1s cubic-bezier(0.28, 0.84, 0.42, 1);
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            margin-top: 15px;
-            font-weight: 600;
-            color: var(--primary-pink);
-            animation: fadeIn 1.5s ease-in-out;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.5;
-        }
-
-        .badge {
-            display: inline-block;
-            background-color: var(--primary-pink);
-            color: var(--dark-brown);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 800;
-            margin-top: 15px;
-            font-size: 1.2rem;
-            border: 2px dashed var(--dark-brown);
-            transform: rotate(-5deg);
-            animation: wiggle 2s infinite ease-in-out;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        
-        /* --- ALERT APOLOGY --- */
-        .alert-apology {
-            background-color: #fff9f2;
-            color: var(--dark-brown);
-            padding: 18px 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            text-align: center;
-            border: 2px dashed var(--orange-soon);
-            font-weight: 600;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            animation: fadeIn 1s ease-in-out;
-            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.1);
-        }
-
-        .alert-apology i {
-            color: var(--orange-soon);
-            margin-right: 5px;
-            font-size: 1.2rem;
-        }
-
-        /* --- FORM NAMA & SEARCH BAR --- */
-        .input-card {
-            background: var(--white);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(107, 67, 42, 0.1);
-            border-left: 5px solid var(--primary-pink);
-            animation: slideInRight 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-            opacity: 0;
-            transform: translateX(-50px);
-        }
-
-        .input-card label {
-            display: block;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: var(--dark-brown);
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #f0e1e4;
-            border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            color: var(--dark-brown);
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary-pink);
-            box-shadow: 0 0 15px rgba(248, 205, 214, 0.7);
-            transform: scale(1.02);
-        }
-
-        .search-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--white);
-            border: 2px solid var(--primary-pink);
-            border-radius: 30px;
-            padding: 5px 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(107, 67, 42, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .search-container:focus-within {
-            box-shadow: 0 0 15px rgba(248, 205, 214, 0.7);
-            transform: scale(1.01);
-        }
-
-        .search-container i {
-            color: var(--primary-pink);
-            font-size: 1.2rem;
-        }
-
-        .search-input {
-            width: 100%;
-            border: none;
-            padding: 10px 0;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            color: var(--dark-brown);
-            outline: none;
-            background: transparent;
-        }
-
-        .search-input::placeholder {
-            color: #c9b4ae;
-        }
-
-        /* --- SUMMARY --- */
-        .summary-card {
-            background: var(--white);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 6px 15px rgba(107, 67, 42, 0.08);
-            border: 2px solid var(--primary-pink);
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        .summary-card h3 {
-            margin-top: 0;
-            font-family: 'Fredoka One', cursive;
-            font-size: 1.4rem;
-            color: var(--dark-brown);
-            border-bottom: 2px dashed var(--primary-pink);
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .summary-list {
-            list-style: none;
-            padding: 0;
-            margin: 15px 0;
-        }
-
-        .summary-list li {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dashed #eee;
-            font-size: 1.05rem;
-        }
-
-        .summary-total {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 800;
-            font-size: 1.25rem;
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 2px solid var(--dark-brown);
-            color: var(--dark-brown);
-        }
-
-        /* --- MENU GRID --- */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .menu-item {
-            background: var(--white);
-            padding: 15px 25px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(107, 67, 42, 0.1);
-            border-left: 5px solid var(--primary-pink);
-            transition: all 0.3s ease;
-            opacity: 0;
-            animation: fadeInUp 0.6s ease forwards;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .menu-item.not-available {
-            opacity: 0.7;
-            background-color: #f7f7f7;
-            border-left-color: #d1c7c5;
-            pointer-events: none;
-        }
-
-        .stamp-soon {
+        #joystick-base {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg);
-            color: var(--orange-soon);
-            border: 4px solid var(--orange-soon);
-            padding: 5px 20px;
-            font-family: 'Fredoka One', cursive;
-            font-size: 1.8rem;
-            border-radius: 8px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            background: rgba(255, 255, 255, 0.9);
-            z-index: 10;
-            pointer-events: none;
-            box-shadow: 0 0 10px rgba(243, 156, 18, 0.2);
-        }
-
-        .menu-text {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .menu-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-transform: capitalize;
-        }
-
-        .menu-price {
-            font-family: 'Fredoka One', cursive;
-            font-size: 1rem;
-            color: var(--dark-brown);
-            background: var(--primary-pink);
-            padding: 3px 10px;
-            border-radius: 8px;
-            width: max-content;
-            transition: all 0.3s ease;
-        }
-
-        .menu-stock-soon {
-            font-size: 0.85rem;
-            color: var(--orange-soon);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .qty-controller {
-            display: flex;
-            align-items: center;
-            background: var(--light-bg);
-            border-radius: 30px;
-            padding: 3px;
-            border: 2px solid var(--primary-pink);
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-qty {
-            background: var(--dark-brown);
-            color: var(--white);
-            border: none;
-            width: 28px;
-            height: 28px;
+            width: 120px; height: 120px;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.1);
             border-radius: 50%;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-
-        .btn-qty:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            color: #888888;
-        }
-
-        .menu-qty {
-            width: 35px;
-            border: none;
-            background: transparent;
-            text-align: center;
-            font-family: 'Poppins', sans-serif;
-            font-weight: bold;
-            font-size: 1rem;
-            color: var(--dark-brown);
-            -moz-appearance: textfield;
-        }
-        
-        .menu-qty:disabled {
-            color: #888888;
-        }
-
-        /* --- WHATSAPP & FOOTER --- */
-        .header-wa-container {
-            margin-top: 25px;
-            animation: fadeIn 1.5s ease-in-out;
-        }
-
-        .btn-checkout-top {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background-color: #25D366;
-            color: white;
-            padding: 15px 35px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.25rem;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        .btn-checkout-top:hover {
-            transform: scale(1.05);
-            background-color: #20ba5a;
-        }
-
-        .cart-badge {
-            background-color: #ff3b30;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            margin-left: 5px;
-        }
-
-        footer {
-            background-color: var(--primary-pink);
-            text-align: center;
-            padding: 30px 20px;
-            margin-top: 50px;
-            color: var(--dark-brown);
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-
-        /* ================= MODAL ================= */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(107, 67, 42, 0.5);
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            opacity: 0;
+            border: 2px solid rgba(255,255,255,0.3);
             pointer-events: none;
-            transition: opacity 0.3s ease;
+        }
+        #joystick-knob {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 54px; height: 54px;
+            background: rgba(255,255,255,0.55);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(0,0,0,0.25);
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
+        #jump-zone {
+            position: absolute;
+            right: max(6%, env(safe-area-inset-right));
+            bottom: max(12%, env(safe-area-inset-bottom));
+            width: 84px; height: 84px;
+            border-radius: 50%;
+            background: rgba(255,235,59,0.25);
+            border: 2px solid rgba(255,235,59,0.6);
+            z-index: 6;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-weight: bold; font-size: 13px; letter-spacing: 0.05em;
+            -webkit-user-select: none; user-select: none;
         }
+        #jump-zone.pressed { background: rgba(255,235,59,0.5); transform: scale(0.92); }
 
-        .modal-box {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 30px 35px;
-            max-width: 380px;
-            width: 90%;
+        /* Camera drag zone covers the WHOLE screen and sits BELOW the joystick/jump
+           zones in z-index. Touches are filtered by checking touch.target, so the
+           joystick and jump button never leak input into camera rotation, and a
+           drag started on empty screen can move anywhere (even briefly crossing
+           over those areas) without snapping or being stolen. */
+        #camera-zone { position: absolute; inset: 0; z-index: 4; }
+
+        #status-row { display: flex; align-items: center; gap: 6px; }
+        #status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ffeb3b; box-shadow: 0 0 6px #ffeb3b; }
+        #status-dot.online { background: #4CAF50; box-shadow: 0 0 6px #4CAF50; }
+        #status-dot.offline { background: #ff5252; box-shadow: 0 0 6px #ff5252; }
+
+        #toast {
+            position: absolute;
+            top: 46%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+            z-index: 11;
+            max-width: 80vw;
             text-align: center;
-            box-shadow: 0 15px 40px rgba(107, 67, 42, 0.25);
-            border: 3px dashed var(--primary-pink);
-            transform: scale(0.8) translateY(20px);
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-
-        .modal-overlay.active .modal-box {
-            transform: scale(1) translateY(0);
-        }
-
-        .modal-icon {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            display: block;
-            animation: bounceIn 0.6s ease;
-        }
-
-        .modal-icon.error { color: var(--red-stock); }
-        .modal-icon.warning { color: var(--orange-soon); }
-        .modal-icon.info { color: var(--dark-brown); }
-
-        .modal-title {
-            font-family: 'Fredoka One', cursive;
-            font-size: 1.5rem;
-            color: var(--dark-brown);
-            margin-bottom: 10px;
-        }
-
-        .modal-message {
-            font-size: 1rem;
-            color: #8b6b5c;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-
-        .modal-btn {
-            background: var(--dark-brown);
-            color: var(--white);
-            border: none;
-            padding: 12px 35px;
-            border-radius: 30px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .modal-btn:hover {
-            background: var(--primary-pink);
-            color: var(--dark-brown);
-            transform: scale(1.05);
-        }
-
-        /* Animations */
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideInRight {
-            to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
-
+        #toast.show { opacity: 1; }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
 <body>
 
-    <div class="modal-overlay" id="customModal">
-        <div class="modal-box">
-            <div class="modal-icon" id="modalIcon">⚠️</div>
-            <div class="modal-title" id="modalTitle">Oops!</div>
-            <div class="modal-message" id="modalMessage">Pesan error di sini...</div>
-            <button class="modal-btn" onclick="tutupModal()">Oke, Mengerti</button>
-        </div>
+    <div id="ui">
+        <div id="status-row"><span id="status-dot"></span><span id="status">Connecting...</span></div>
+        <div class="hint">Left: joystick move | Anywhere: drag to look | Right button: jump</div>
     </div>
 
-    <header>
-        <h1>MochiMut!</h1>
-        <div class="subtitle">
-            <i class="fas fa-store"></i> Kami dari kelas <b>10 TKJ 2</b> menghadirkan berbagai varian mochi kenyal yang enak!
-        </div>
-        <div class="badge">COMING SOON</div>
-        
-        <div class="header-wa-container">
-            <button onclick="kirimKeWhatsApp()" class="btn-checkout-top">
-                <i class="fab fa-whatsapp"></i> Kirim Pesanan <span class="cart-badge" id="total-badge">0</span>
-            </button>
-        </div>
-    </header>
+    <div id="toast"></div>
 
-    <div class="container">
-        
-        <!-- ALERT PERMINTAAN MAAF SESUAI REQUEST -->
-        <div class="alert-apology">
-            <i class="fas fa-info-circle"></i> <strong>Mohon Maaf Banget!</strong> Saat ini semua varian mochi kami sedang kosong karena barangnya belum tersedia. Pantau terus ya untuk update selanjutnya! 🥞
-        </div>
-
-        <div class="input-card">
-            <label for="nama-pemesan"><i class="fas fa-user-edit"></i> Nama Pemesan:</label>
-            <input type="text" id="nama-pemesan" class="input-field" placeholder="Masukkan nama kamu di sini..." required disabled>
-        </div>
-
-        <div class="search-container">
-            <i class="fas fa-search"></i>
-            <input type="text" id="search-mochi" class="search-input" placeholder="Cari varian mochi favoritmu (misal: coklat, matcha)..." onkeyup="cariMochi()">
-        </div>
-
-        <div class="summary-card" id="summary-card">
-            <h3><i class="fas fa-shopping-basket"></i> Ringkasan Pesanan Kamu</h3>
-            <ul class="summary-list" id="summary-list"></ul>
-            <div class="summary-total">
-                <span>Total Bayar:</span>
-                <span id="summary-total-price">Rp 0</span>
-            </div>
-        </div>
-
-        <div class="menu-grid" id="menu-grid">
-            
-            <!-- SEMUA ITEM DIRUBAH MENJADI NOT-AVAILABLE DENGAN STAMP SOON! -->
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Strawberry Coklat</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Coklat Milo</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Tiramisu</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Coklat Oreo</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Mangga Cream</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Coklat Keju</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Oreo Cream</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Oreo Red Velvet</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Coklat Crunchy</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Beng Beng Coklat</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Coklat Anggur</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Matcha</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Durian</span>
-                    <span class="menu-price">10k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Blueberry Cream</span>
-                    <span class="menu-price">10k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Strawberry Matcha</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Strawberry Red Velvet</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Strawberry Cream</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Strawberry Cheesecake</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Blueberry Cheesecake</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Biscoff Lotus</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Brownies Cream</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Cream Cheese</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Taro Cheese</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Cheese Crunchy</span>
-                    <span class="menu-price">7k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Mochi Bites Coklat</span>
-                    <span class="menu-price">8k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-
-            <div class="menu-item not-available">
-                <div class="stamp-soon">SOON!</div>
-                <div class="menu-text">
-                    <span class="menu-name">Mochi Bites Kacang Coklat</span>
-                    <span class="menu-price">8k</span>
-                    <span class="menu-stock-soon"><i class="fas fa-clock"></i> Belum Tersedia</span>
-                </div>
-                <div class="qty-controller"><button type="button" class="btn-qty" disabled>-</button><input type="number" class="menu-qty" disabled><button type="button" class="btn-qty" disabled>+</button></div>
-            </div>
-            
-        </div>
-    </div>
-
-    <footer>
-        <div>Mochi Bumikita | Ditunggu kehadirannya ya!</div>
-    </footer>
+    <div id="camera-zone"></div>
+    <div id="joystick-zone"><div id="joystick-base"></div><div id="joystick-knob"></div></div>
+    <div id="jump-zone">JUMP</div>
 
     <script>
-        // ================= SEARCH BAR =================
-        function cariMochi() {
-            let filter = document.getElementById('search-mochi').value.toLowerCase();
-            let items = document.querySelectorAll('.menu-item');
-            
-            items.forEach(item => {
-                let name = item.querySelector('.menu-name').innerText.toLowerCase();
-                if (name.includes(filter)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+        // ==========================================
+        // 1. THREE.JS ENVIRONMENT SETUP
+        // ==========================================
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x87CEEB, 15, 70);
+
+        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 200);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
+
+        // Lighting
+        scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.85);
+        dirLight.position.set(15, 25, 10);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.set(1024, 1024);
+        dirLight.shadow.camera.left = -40;
+        dirLight.shadow.camera.right = 40;
+        dirLight.shadow.camera.top = 40;
+        dirLight.shadow.camera.bottom = -40;
+        scene.add(dirLight);
+
+        // Ground
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x6fae5e, roughness: 0.95 });
+        const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        const grid = new THREE.GridHelper(200, 50, 0x000000, 0x000000);
+        grid.material.opacity = 0.08;
+        grid.material.transparent = true;
+        scene.add(grid);
+
+        // ==========================================
+        // WORLD — a few platforms to jump between, so
+        // "make world cool" has something to climb on.
+        // ==========================================
+        const platforms = []; // { mesh, halfW, halfD, topY }
+
+        function addPlatform(x, y, z, w, d, h, color) {
+            const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.8 });
+            const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+            mesh.position.set(x, y, z);
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            scene.add(mesh);
+            platforms.push({ mesh, halfW: w / 2, halfD: d / 2, topY: y + h / 2 });
         }
 
-        // ================= CUSTOM MODAL FUNCTIONS =================
-        function tampilkanModal(judul, pesan, tipe = 'error') {
-            const modal = document.getElementById('customModal');
-            const icon = document.getElementById('modalIcon');
-            const title = document.getElementById('modalTitle');
-            const message = document.getElementById('modalMessage');
+        addPlatform(6, 1, -4, 4, 4, 2, 0xe0a458);
+        addPlatform(11, 2.2, -7, 3.5, 3.5, 2, 0xd98c3f);
+        addPlatform(15, 3.6, -3, 3, 3, 2, 0xe0a458);
+        addPlatform(-7, 1.4, -6, 4, 4, 2, 0x7fb3d5);
+        addPlatform(-12, 2.8, -2, 3.5, 3.5, 2, 0x5a9bc4);
+        addPlatform(0, 4.6, -14, 5, 5, 2, 0xc46fb3);
+        addPlatform(8, 1, 9, 4, 4, 2, 0x9bd56f);
+        addPlatform(14, 1, 12, 4, 6, 2, 0x9bd56f);
 
-            title.innerText = judul;
-            message.innerText = pesan;
-            icon.className = 'modal-icon';
-            
-            if (tipe === 'error') {
-                icon.innerHTML = '<i class="fas fa-times-circle"></i>';
-                icon.classList.add('error');
-            } else if (tipe === 'warning') {
-                icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-                icon.classList.add('warning');
-            } else if (tipe === 'info') {
-                icon.innerHTML = '<i class="fas fa-info-circle"></i>';
-                icon.classList.add('info');
+        // A few simple low-poly trees for atmosphere
+        function addTree(x, z) {
+            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.3, 1.6, 6), new THREE.MeshStandardMaterial({ color: 0x6b4a2f }));
+            trunk.position.set(x, 0.8, z);
+            trunk.castShadow = true;
+            scene.add(trunk);
+            const leaves = new THREE.Mesh(new THREE.ConeGeometry(1.1, 2.2, 8), new THREE.MeshStandardMaterial({ color: 0x3f8f4f }));
+            leaves.position.set(x, 2.4, z);
+            leaves.castShadow = true;
+            scene.add(leaves);
+        }
+        for (let i = 0; i < 14; i++) {
+            const a = Math.random() * Math.PI * 2;
+            const r = 18 + Math.random() * 22;
+            addTree(Math.cos(a) * r, Math.sin(a) * r);
+        }
+
+        // ==========================================
+        // PLAYER MODEL & STATE
+        // ==========================================
+        const players = {}; // remote players: id -> { mesh, targetX, targetY, targetZ, targetYaw }
+        // r128 (the Three.js build this page loads) has no CapsuleGeometry —
+        // that constructor only exists from r142+. Build an equivalent capsule
+        // shape ourselves: a cylinder body with a sphere cap on each end,
+        // grouped into one object. Groups support .position/.rotation just
+        // like a Mesh, so everything else in this file works unchanged.
+        function makeCapsuleAvatar(color) {
+            const mat = new THREE.MeshStandardMaterial({ color });
+            const group = new THREE.Group();
+
+            const body = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1, 12), mat);
+            body.castShadow = true;
+            group.add(body);
+
+            const topCap = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 8), mat);
+            topCap.position.y = 0.5;
+            topCap.castShadow = true;
+            group.add(topCap);
+
+            const bottomCap = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 8), mat);
+            bottomCap.position.y = -0.5;
+            bottomCap.castShadow = true;
+            group.add(bottomCap);
+
+            return group;
+        }
+
+        const myPlayer = makeCapsuleAvatar(0x00ff88);
+        myPlayer.position.set(0, 1, 4);
+        scene.add(myPlayer);
+
+        let velocityY = 0;
+        let onGround = true;
+        const GRAVITY = -22;
+        const JUMP_SPEED = 9;
+        const GROUND_Y = 1; // capsule half-height rests at y=1 on flat ground
+
+        scene.add(camera); // camera lives directly in world space — no pivot indirection,
+                            // which was the source of the "doesn't follow me" bug: the old
+                            // pivot's rotation + a lookAt() aimed at world-origin (0,1.4,0)
+                            // meant the camera only looked correct near spawn and drifted
+                            // off-target the moment you walked away.
+
+        // ==========================================
+        // 2. MOBILE CONTROLS — fixed for proper multi-touch
+        // ==========================================
+        const input = { x: 0, y: 0 };
+        let camYaw = 0;
+        let camPitch = -0.25;
+        const CAM_DIST = 6.5;
+        const CAM_HEIGHT = 1.4;     // vertical offset of the look-target above the player's feet
+        const PITCH_MIN = -1.1, PITCH_MAX = 0.9;
+        const camLookTarget = new THREE.Vector3();
+
+        function updateCameraTransform(dt) {
+            // Smoothly chase the player's position so camera motion stays steady even
+            // if the player snaps slightly on landing/collision frames.
+            const desiredTarget = new THREE.Vector3(
+                myPlayer.position.x,
+                myPlayer.position.y + CAM_HEIGHT,
+                myPlayer.position.z
+            );
+            const smoothing = dt === undefined ? 1 : Math.min(1, dt * 14);
+            camLookTarget.lerp(desiredTarget, smoothing);
+
+            // Standard spherical orbit around the player: yaw rotates around Y,
+            // pitch tilts the camera up/down, both measured from the live target.
+            const horizDist = Math.cos(camPitch) * CAM_DIST;
+            const height = Math.sin(camPitch) * CAM_DIST;
+
+            camera.position.set(
+                camLookTarget.x + horizDist * Math.sin(camYaw),
+                camLookTarget.y + height,
+                camLookTarget.z + horizDist * Math.cos(camYaw)
+            );
+            camera.lookAt(camLookTarget);
+        }
+
+        // ---------- Joystick: tracks its OWN touch identifier ----------
+        const joyZone = document.getElementById('joystick-zone');
+        const joyKnob = document.getElementById('joystick-knob');
+        let joyTouchId = null;
+        let joyCenter = { x: 0, y: 0 };
+        const JOY_RADIUS = 55;
+
+        function resetJoystick() {
+            joyTouchId = null;
+            joyKnob.style.transform = `translate(-50%, -50%)`;
+            input.x = 0; input.y = 0;
+        }
+
+        function moveJoystickKnob(touch) {
+            let dx = touch.clientX - joyCenter.x;
+            let dy = touch.clientY - joyCenter.y;
+            const distance = Math.min(Math.sqrt(dx * dx + dy * dy), JOY_RADIUS);
+            const angle = Math.atan2(dy, dx);
+            const knobX = Math.cos(angle) * distance;
+            const knobY = Math.sin(angle) * distance;
+            joyKnob.style.transform = `translate(calc(-50% + ${knobX}px), calc(-50% + ${knobY}px))`;
+            input.x = knobX / JOY_RADIUS;
+            input.y = knobY / JOY_RADIUS;
+        }
+
+        joyZone.addEventListener('touchstart', (e) => {
+            if (joyTouchId !== null) return; // already have a finger on the stick
+            const t = e.changedTouches[0];
+            const rect = joyZone.getBoundingClientRect();
+            joyCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+            joyTouchId = t.identifier;
+            moveJoystickKnob(t);
+            e.preventDefault();
+        }, { passive: false });
+
+        window.addEventListener('touchmove', (e) => {
+            if (joyTouchId === null) return;
+            for (const t of e.changedTouches) {
+                if (t.identifier === joyTouchId) { moveJoystickKnob(t); e.preventDefault(); }
             }
-            modal.classList.add('active');
+        }, { passive: false });
+
+        function endJoystickTouch(e) {
+            for (const t of e.changedTouches) {
+                if (t.identifier === joyTouchId) resetJoystick();
+            }
         }
+        window.addEventListener('touchend', endJoystickTouch);
+        window.addEventListener('touchcancel', endJoystickTouch);
 
-        function tutupModal() {
-            document.getElementById('customModal').classList.remove('active');
+        // Mouse fallback for desktop testing
+        let joyMouseDown = false;
+        joyZone.addEventListener('mousedown', (e) => {
+            const rect = joyZone.getBoundingClientRect();
+            joyCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+            joyMouseDown = true;
+            moveJoystickKnob(e);
+        });
+        window.addEventListener('mousemove', (e) => { if (joyMouseDown) moveJoystickKnob(e); });
+        window.addEventListener('mouseup', () => { if (joyMouseDown) { joyMouseDown = false; resetJoystick(); } });
+
+        // ---------- Jump button: tracks its OWN touch identifier ----------
+        const jumpZone = document.getElementById('jump-zone');
+        let jumpTouchId = null;
+        let jumpRequested = false;
+
+        function pressJump(e) {
+            if (jumpTouchId !== null) return;
+            jumpTouchId = e.changedTouches ? e.changedTouches[0].identifier : 'mouse';
+            jumpRequested = true;
+            jumpZone.classList.add('pressed');
+            e.preventDefault();
+            e.stopPropagation();
         }
-
-        document.getElementById('customModal').addEventListener('click', function(e) {
-            if (e.target === this) tutupModal();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') tutupModal();
-        });
-
-        // ================= LOGIC FUNCTIONS =================
-        function hitungUlang() {
-            const inputs = document.querySelectorAll('.menu-qty:not(:disabled)');
-            const summaryCard = document.getElementById('summary-card');
-            const summaryList = document.getElementById('summary-list');
-            const summaryTotalPrice = document.getElementById('summary-total-price');
-            const totalBadge = document.getElementById('total-badge');
-
-            let totalHarga = 0;
-            let totalUnit = 0;
-            let listHTML = "";
-
-            inputs.forEach(input => {
-                let qty = parseInt(input.value) || 0;
-                if (qty > 0) {
-                    const nama = input.getAttribute('data-name');
-                    const harga = parseInt(input.getAttribute('data-price'));
-                    const subtotal = harga * qty;
-
-                    totalHarga += subtotal;
-                    totalUnit += qty;
-
-                    listHTML += `<li>
-                        <span><strong>${nama}</strong> (x${qty})</span>
-                        <span>Rp ${subtotal.toLocaleString('id-ID')}</span>
-                    </li>`;
-                }
-            });
-
-            totalBadge.innerText = totalUnit;
-
-            if (totalUnit > 0) {
-                summaryCard.style.display = 'block';
-                summaryList.innerHTML = listHTML;
-                summaryTotalPrice.innerText = `Rp ${totalHarga.toLocaleString('id-ID')}`;
+        function releaseJump(e) {
+            const id = e.changedTouches ? e.changedTouches[0].identifier : 'mouse';
+            if (e.changedTouches) {
+                for (const t of e.changedTouches) { if (t.identifier === jumpTouchId) jumpTouchId = null; }
             } else {
-                summaryCard.style.display = 'none';
+                jumpTouchId = null;
+            }
+            jumpZone.classList.remove('pressed');
+        }
+        jumpZone.addEventListener('touchstart', pressJump, { passive: false });
+        jumpZone.addEventListener('touchend', releaseJump);
+        jumpZone.addEventListener('touchcancel', releaseJump);
+        jumpZone.addEventListener('mousedown', pressJump);
+        jumpZone.addEventListener('mouseup', releaseJump);
+        window.addEventListener('keydown', (e) => { if (e.code === 'Space') jumpRequested = true; });
+
+        // ---------- Camera drag: per-touch tracked, ignores joystick/jump touches ----------
+        // Key fix vs. the reference: every touch is tracked by its OWN identifier in a
+        // map, so starting a second finger, or replacing a lifted finger, never causes
+        // the camera to snap using stale/wrong touch data. Touches that land on the
+        // joystick or jump button are skipped here entirely (checked via elementFromPoint
+        // equivalent: comparing target ancestry) so the two systems can never fight.
+        const camZone = document.getElementById('camera-zone');
+        const camTouches = {}; // identifier -> {x, y}
+
+        function belongsToControl(target) {
+            return joyZone.contains(target) || jumpZone.contains(target);
+        }
+
+        camZone.addEventListener('touchstart', (e) => {
+            for (const t of e.changedTouches) {
+                if (belongsToControl(t.target)) continue;
+                camTouches[t.identifier] = { x: t.clientX, y: t.clientY };
+            }
+        }, { passive: true });
+
+        camZone.addEventListener('touchmove', (e) => {
+            let used = false;
+            for (const t of e.changedTouches) {
+                const prev = camTouches[t.identifier];
+                if (!prev) continue;
+                used = true;
+                const deltaX = t.clientX - prev.x;
+                const deltaY = t.clientY - prev.y;
+                camYaw -= deltaX * 0.0065;
+                camPitch -= deltaY * 0.0055;
+                camPitch = Math.max(PITCH_MIN, Math.min(PITCH_MAX, camPitch));
+                camTouches[t.identifier] = { x: t.clientX, y: t.clientY };
+            }
+            if (used) e.preventDefault();
+        }, { passive: false });
+
+        function clearCamTouch(e) {
+            for (const t of e.changedTouches) delete camTouches[t.identifier];
+        }
+        camZone.addEventListener('touchend', clearCamTouch);
+        camZone.addEventListener('touchcancel', clearCamTouch);
+
+        // Mouse drag fallback (desktop) — ignore drags starting on the controls
+        let mouseDragging = false;
+        let lastMouse = { x: 0, y: 0 };
+        camZone.addEventListener('mousedown', (e) => {
+            if (belongsToControl(e.target)) return;
+            mouseDragging = true;
+            lastMouse = { x: e.clientX, y: e.clientY };
+        });
+        window.addEventListener('mousemove', (e) => {
+            if (!mouseDragging) return;
+            const deltaX = e.clientX - lastMouse.x;
+            const deltaY = e.clientY - lastMouse.y;
+            camYaw -= deltaX * 0.0065;
+            camPitch -= deltaY * 0.0055;
+            camPitch = Math.max(PITCH_MIN, Math.min(PITCH_MAX, camPitch));
+            lastMouse = { x: e.clientX, y: e.clientY };
+        });
+        window.addEventListener('mouseup', () => { mouseDragging = false; });
+        camZone.addEventListener('wheel', (e) => {
+            // optional zoom via scroll on desktop, harmless on mobile (no wheel events there)
+        }, { passive: true });
+
+        // ==========================================
+        // 3. OPTIMIZED AUTO-JOIN NETWORKING (HOST-RELAY)
+        // ==========================================
+        const GLOBAL_ROOM_ID = "awesome-mobile-game-room-1";
+        let isHost = false;
+        let hostConnection = null;
+        let hostClients = [];
+        let myId = null;
+
+        let peer = new Peer(GLOBAL_ROOM_ID);
+
+        const statusEl = document.getElementById('status');
+        const statusDot = document.getElementById('status-dot');
+        const toastEl = document.getElementById('toast');
+        let toastTimer = null;
+        function toast(msg) {
+            toastEl.textContent = msg;
+            toastEl.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
+        }
+        function setStatus(text, state) {
+            statusEl.textContent = text;
+            statusDot.className = state; // 'online' | 'offline' | ''
+        }
+
+        peer.on('open', (id) => {
+            isHost = true;
+            myId = id;
+            setStatus('Hosting Global Game', 'online');
+            toast('You opened the public room — others can join you now');
+        });
+
+        peer.on('error', (err) => {
+            if (err && err.type === 'unavailable-id') {
+                // Room exists! Become a client instead.
+                peer = new Peer();
+                peer.on('open', (id) => {
+                    myId = id;
+                    hostConnection = peer.connect(GLOBAL_ROOM_ID, { reliable: true });
+                    setupClientNetworking();
+                });
+                peer.on('error', () => setStatus('Offline (solo mode)', 'offline'));
+            } else if (!isHost) {
+                setStatus('Offline (solo mode)', 'offline');
+            }
+        });
+
+        // --- HOST LOGIC ---
+        peer.on('connection', (conn) => {
+            if (!isHost) return;
+            hostClients.push(conn);
+
+            conn.on('data', (data) => {
+                if (!Array.isArray(data) || data.length < 3) return; // guard malformed packets
+                const payload = [conn.peer, data[0], data[1], data[2]];
+                updateRemotePlayer(payload);
+                hostClients.forEach(c => {
+                    if (c.peer !== conn.peer && c.open) c.send(payload);
+                });
+            });
+
+            conn.on('close', () => {
+                hostClients = hostClients.filter(c => c.peer !== conn.peer);
+                if (players[conn.peer]) {
+                    scene.remove(players[conn.peer].mesh);
+                    delete players[conn.peer];
+                }
+            });
+        });
+
+        // --- CLIENT LOGIC ---
+        function setupClientNetworking() {
+            hostConnection.on('open', () => {
+                setStatus('Joined Global Game', 'online');
+                toast('Joined the public room');
+            });
+            hostConnection.on('data', (payload) => {
+                if (!Array.isArray(payload) || payload.length < 4) return;
+                updateRemotePlayer(payload);
+            });
+            hostConnection.on('close', () => {
+                setStatus('Disconnected (solo mode)', 'offline');
+            });
+        }
+
+        // ==========================================
+        // 4. LERP & NETWORK TICK RATE
+        // ==========================================
+        const REMOTE_COLORS = [0xff5252, 0x5c8dff, 0xffb347, 0xb06fff, 0xff6fb0, 0x6fffe0];
+        function colorForId(id) {
+            let h = 0;
+            for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+            return REMOTE_COLORS[h % REMOTE_COLORS.length];
+        }
+
+        function updateRemotePlayer(data) {
+            const id = data[0];
+            if (!players[id]) {
+                const mesh = makeCapsuleAvatar(colorForId(id));
+                scene.add(mesh);
+                players[id] = { mesh, targetX: data[1], targetY: data[2], targetZ: data[3], targetYaw: 0 };
+            }
+            // data layout: [id, x, y, z]  (yaw omitted from this tick for brevity/bandwidth;
+            // facing direction is inferred from movement delta below for smoother visuals)
+            const p = players[id];
+            const dx = data[1] - p.targetX;
+            const dz = data[3] - p.targetZ;
+            if (Math.abs(dx) > 0.001 || Math.abs(dz) > 0.001) {
+                p.targetYaw = Math.atan2(dx, dz);
+            }
+            p.targetX = data[1];
+            p.targetY = data[2];
+            p.targetZ = data[3];
+        }
+
+        let netTickAccum = 0;
+        function networkTick(dt) {
+            netTickAccum += dt;
+            if (netTickAccum < 1 / 15) return;
+            netTickAccum = 0;
+
+            const packet = [
+                Math.round(myPlayer.position.x * 100) / 100,
+                Math.round(myPlayer.position.y * 100) / 100,
+                Math.round(myPlayer.position.z * 100) / 100
+            ];
+
+            if (isHost) {
+                const hostPayload = ['host', ...packet];
+                hostClients.forEach(c => { if (c.open) c.send(hostPayload); });
+            } else if (hostConnection && hostConnection.open) {
+                hostConnection.send(packet);
             }
         }
 
-        function kirimKeWhatsApp() {
-            // Karena semua dinonaktifkan, klik kirim pesanan otomatis memicu modal pemberitahuan kosong
-            tampilkanModal('Mohon Maaf!', 'Saat ini produk kami belum tersedia untuk dipesan. Tunggu update selanjutnya ya! 🙏', 'warning');
-            return;
-        }
-    </script>
+        // ==========================================
+        // 5. GAME LOOP & MOVEMENT (with gravity + platform collision)
+        // ==========================================
+        const speed = 6.5; // units/sec, frame-rate independent now (was 0.15/frame before)
+        const clock = new THREE.Clock();
 
+        function groundHeightAt(x, z) {
+            // returns the highest surface at this x/z: either a platform top, or flat ground
+            let best = 0; // flat ground level (capsule center rests at GROUND_Y above this)
+            for (const p of platforms) {
+                if (x > p.mesh.position.x - p.halfW && x < p.mesh.position.x + p.halfW &&
+                    z > p.mesh.position.z - p.halfD && z < p.mesh.position.z + p.halfD) {
+                    if (p.topY > best) best = p.topY;
+                }
+            }
+            return best;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const dt = Math.min(0.05, clock.getDelta());
+
+            // Move player relative to camera yaw.
+            // Forward/right vectors are derived the same way the camera computes
+            // its own facing (see updateCameraTransform), so movement is
+            // guaranteed to agree with what's actually on screen at every yaw —
+            // the previous formula reused the camera's offset rotation directly,
+            // which is the *opposite* of camera-forward, so strafing and
+            // diagonal movement were mirrored left/right except at yaw 0/180.
+            const mag = Math.min(1, Math.sqrt(input.x * input.x + input.y * input.y));
+            if (mag > 0.05) {
+                const forwardX = -Math.sin(camYaw), forwardZ = -Math.cos(camYaw); // away from camera
+                const rightX = Math.cos(camYaw), rightZ = -Math.sin(camYaw);      // 90° clockwise from forward
+
+                // joystick: input.y < 0 means "pushed up" -> move forward
+                const moveX = rightX * input.x + forwardX * (-input.y);
+                const moveZ = rightZ * input.x + forwardZ * (-input.y);
+
+                myPlayer.position.x += moveX * speed * dt;
+                myPlayer.position.z += moveZ * speed * dt;
+                myPlayer.rotation.y = Math.atan2(moveX, moveZ);
+            }
+
+            // Jump + gravity
+            if (jumpRequested) {
+                if (onGround) { velocityY = JUMP_SPEED; onGround = false; }
+                jumpRequested = false;
+            }
+            velocityY += GRAVITY * dt;
+            myPlayer.position.y += velocityY * dt;
+
+            const surfaceY = groundHeightAt(myPlayer.position.x, myPlayer.position.z) + GROUND_Y;
+            if (myPlayer.position.y <= surfaceY) {
+                myPlayer.position.y = surfaceY;
+                velocityY = 0;
+                onGround = true;
+            }
+
+            // fell off the world (shouldn't normally happen, but safe respawn)
+            if (myPlayer.position.y < -20) {
+                myPlayer.position.set(0, GROUND_Y, 4);
+                velocityY = 0;
+            }
+
+            updateCameraTransform(dt);
+            networkTick(dt);
+
+            // LERP remote players toward their last known network state
+            Object.values(players).forEach(p => {
+                const t = Math.min(1, dt * 10);
+                p.mesh.position.x += (p.targetX - p.mesh.position.x) * t;
+                p.mesh.position.y += (p.targetY - p.mesh.position.y) * t;
+                p.mesh.position.z += (p.targetZ - p.mesh.position.z) * t;
+                let cur = p.mesh.rotation.y;
+                let diff = p.targetYaw - cur;
+                while (diff > Math.PI) diff -= Math.PI * 2;
+                while (diff < -Math.PI) diff += Math.PI * 2;
+                p.mesh.rotation.y = cur + diff * t;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        updateCameraTransform();
+        animate();
+    </script>
 </body>
 </html>
