@@ -13,47 +13,11 @@
         #lock-hint { color: #ffeb3b; opacity: 0.95; }
 
         /* Control Zones */
-        #joystick-zone {
-            position: absolute;
-            bottom: max(10%, env(safe-area-inset-bottom));
-            left: 5%;
-            width: 130px; height: 130px;
-            z-index: 5;
-        }
-        #joystick-base {
-            position: absolute;
-            width: 120px; height: 120px;
-            left: 50%; top: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.3);
-            pointer-events: none;
-        }
-        #joystick-knob {
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 54px; height: 54px;
-            background: rgba(255,255,255,0.55);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            box-shadow: 0 0 10px rgba(0,0,0,0.25);
-        }
+        #joystick-zone { position: absolute; bottom: max(10%, env(safe-area-inset-bottom)); left: 5%; width: 130px; height: 130px; z-index: 5; }
+        #joystick-base { position: absolute; width: 120px; height: 120px; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(255,255,255,0.1); border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); pointer-events: none; }
+        #joystick-knob { position: absolute; top: 50%; left: 50%; width: 54px; height: 54px; background: rgba(255,255,255,0.55); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; box-shadow: 0 0 10px rgba(0,0,0,0.25); }
 
-        #jump-zone {
-            position: absolute;
-            right: max(6%, env(safe-area-inset-right));
-            bottom: max(12%, env(safe-area-inset-bottom));
-            width: 84px; height: 84px;
-            border-radius: 50%;
-            background: rgba(255,235,59,0.25);
-            border: 2px solid rgba(255,235,59,0.6);
-            z-index: 6;
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-weight: bold; font-size: 13px; letter-spacing: 0.05em;
-            -webkit-user-select: none; user-select: none;
-        }
+        #jump-zone { position: absolute; right: max(6%, env(safe-area-inset-right)); bottom: max(12%, env(safe-area-inset-bottom)); width: 84px; height: 84px; border-radius: 50%; background: rgba(255,235,59,0.25); border: 2px solid rgba(255,235,59,0.6); z-index: 6; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 13px; letter-spacing: 0.05em; -webkit-user-select: none; user-select: none; }
         #jump-zone.pressed { background: rgba(255,235,59,0.5); transform: scale(0.92); }
 
         #camera-zone { position: absolute; inset: 0; z-index: 4; }
@@ -63,140 +27,42 @@
         #status-dot.online { background: #4CAF50; box-shadow: 0 0 6px #4CAF50; }
         #status-dot.offline { background: #ff5252; box-shadow: 0 0 6px #ff5252; }
 
-        /* ==========================================
-           GLOBAL CHAT SYSTEM
-           ========================================== */
-        #chat-container {
-            position: absolute;
-            bottom: max(10px, env(safe-area-inset-bottom));
-            left: 50%;
-            transform: translateX(-50%);
-            width: min(420px, 92vw);
-            z-index: 15;
-            display: flex;
-            flex-direction: column;
-            pointer-events: none;
-        }
-
-        #chat-messages {
-            max-height: 180px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 8px 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.3) transparent;
-            mask-image: linear-gradient(to bottom, transparent 0%, black 12%);
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%);
-        }
+        /* GLOBAL CHAT SYSTEM */
+        #chat-container { position: absolute; bottom: max(10px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: min(420px, 92vw); z-index: 15; display: flex; flex-direction: column; pointer-events: none; }
+        #chat-messages { max-height: 180px; overflow-y: auto; overflow-x: hidden; padding: 8px 10px; display: flex; flex-direction: column; gap: 3px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.3) transparent; mask-image: linear-gradient(to bottom, transparent 0%, black 12%); -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%); }
         #chat-messages::-webkit-scrollbar { width: 4px; }
         #chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 2px; }
 
-        .chat-msg {
-            color: #fff;
-            font-size: 13px;
-            line-height: 1.35;
-            word-break: break-word;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.7);
-            animation: msgIn 0.25s ease-out;
-            pointer-events: auto;
-        }
+        .chat-msg { color: #fff; font-size: 13px; line-height: 1.35; word-break: break-word; text-shadow: 0 1px 3px rgba(0,0,0,0.7); animation: msgIn 0.25s ease-out; pointer-events: auto; }
         .chat-msg.system { color: #ffeb3b; font-style: italic; font-size: 12px; }
         .chat-msg.join { color: #7fff7f; font-style: italic; font-size: 12px; }
         .chat-msg.leave { color: #ff7f7f; font-style: italic; font-size: 12px; }
         .chat-msg .sender { font-weight: bold; color: #87CEEB; }
         .chat-msg .sender-host { font-weight: bold; color: #ffd700; }
+        @keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes msgIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        #chat-input-row {
-            display: flex; gap: 6px; padding: 6px 8px;
-            background: rgba(0,0,0,0.45); border-radius: 0 0 10px 10px;
-            backdrop-filter: blur(6px); pointer-events: auto; align-items: center;
-        }
-        #chat-input {
-            flex: 1; background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
-            color: #fff; padding: 7px 10px; font-size: 13px;
-            outline: none; font-family: sans-serif;
-        }
+        #chat-input-row { display: flex; gap: 6px; padding: 6px 8px; background: rgba(0,0,0,0.45); border-radius: 0 0 10px 10px; backdrop-filter: blur(6px); pointer-events: auto; align-items: center; }
+        #chat-input { flex: 1; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; padding: 7px 10px; font-size: 13px; outline: none; font-family: sans-serif; }
         #chat-input::placeholder { color: rgba(255,255,255,0.45); }
         #chat-input:focus { border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.18); }
 
-        #chat-send-btn {
-            background: rgba(76,175,80,0.7); border: none; border-radius: 8px;
-            color: #fff; padding: 7px 14px; font-size: 12px; font-weight: bold;
-            cursor: pointer; transition: background 0.15s; white-space: nowrap;
-            -webkit-user-select: none; user-select: none;
-        }
+        #chat-send-btn { background: rgba(76,175,80,0.7); border: none; border-radius: 8px; color: #fff; padding: 7px 14px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background 0.15s; white-space: nowrap; -webkit-user-select: none; user-select: none; }
         #chat-send-btn:hover { background: rgba(76,175,80,0.9); }
         #chat-send-btn:disabled { background: rgba(120,120,120,0.4); color: rgba(255,255,255,0.4); cursor: not-allowed; }
 
-        #chat-cooldown-bar {
-            height: 3px; background: rgba(76,175,80,0.6); border-radius: 0 0 10px 10px;
-            width: 100%; transition: width 0.1s linear; position: absolute; bottom: 0; left: 0;
-        }
+        #chat-cooldown-bar { height: 3px; background: rgba(76,175,80,0.6); border-radius: 0 0 10px 10px; width: 100%; transition: width 0.1s linear; position: absolute; bottom: 0; left: 0; }
         #chat-cooldown-bar.cooling { background: rgba(255,82,82,0.7); width: 0%; }
+        .chat-hidden #chat-messages, .chat-hidden #chat-input-row, .chat-hidden #chat-cooldown-bar { display: none !important; }
 
-        .chat-hidden #chat-messages,
-        .chat-hidden #chat-input-row,
-        .chat-hidden #chat-cooldown-bar { display: none !important; }
-
-        #chat-toggle-btn {
-            position: absolute; bottom: max(6px, env(safe-area-inset-bottom)); right: max(6px, env(safe-area-inset-right));
-            width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.45);
-            border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 18px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 16; backdrop-filter: blur(4px);
-            -webkit-user-select: none; user-select: none; pointer-events: auto;
-        }
+        #chat-toggle-btn { position: absolute; bottom: max(6px, env(safe-area-inset-bottom)); right: max(6px, env(safe-area-inset-right)); width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 16; backdrop-filter: blur(4px); -webkit-user-select: none; user-select: none; pointer-events: auto; }
         #chat-toggle-btn:hover { background: rgba(0,0,0,0.6); }
-        #chat-toggle-btn .badge {
-            position: absolute; top: -3px; right: -3px; background: #ff5252; color: #fff;
-            font-size: 10px; font-weight: bold; width: 16px; height: 16px; border-radius: 50%;
-            display: none; align-items: center; justify-content: center;
-        }
+        #chat-toggle-btn .badge { position: absolute; top: -3px; right: -3px; background: #ff5252; color: #fff; font-size: 10px; font-weight: bold; width: 16px; height: 16px; border-radius: 50%; display: none; align-items: center; justify-content: center; }
         #chat-toggle-btn .badge.show { display: flex; }
 
-        /* ==========================================
-           3D CHAT BUBBLES
-           ========================================== */
-        #bubbles-container {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 12; overflow: hidden;
-        }
-        .head-bubble {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.95);
-            color: #222;
-            padding: 8px 12px;
-            border-radius: 14px;
-            font-size: 13px;
-            font-weight: bold;
-            text-align: center;
-            max-width: 160px;
-            word-wrap: break-word;
-            transform: translate(-50%, -100%);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-            transition: opacity 0.2s ease-out;
-            pointer-events: none;
-            will-change: transform, left, top;
-        }
-        .head-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -6px; left: 50%;
-            transform: translateX(-50%);
-            border-width: 6px 6px 0;
-            border-style: solid;
-            border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent;
-        }
+        /* 3D CHAT BUBBLES */
+        #bubbles-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 12; overflow: hidden; }
+        .head-bubble { position: absolute; background: rgba(255, 255, 255, 0.95); color: #222; padding: 8px 12px; border-radius: 14px; font-size: 13px; font-weight: bold; text-align: center; max-width: 160px; word-wrap: break-word; transform: translate(-50%, -100%); box-shadow: 0 4px 10px rgba(0,0,0,0.25); transition: opacity 0.2s ease-out; pointer-events: none; will-change: transform, left, top; }
+        .head-bubble::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); border-width: 6px 6px 0; border-style: solid; border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
@@ -214,7 +80,6 @@
     <div id="camera-zone"></div>
     <div id="joystick-zone"><div id="joystick-base"></div><div id="joystick-knob"></div></div>
     <div id="jump-zone">JUMP</div>
-    
     <div id="bubbles-container"></div>
 
     <button id="chat-toggle-btn" title="Toggle Chat">
@@ -245,731 +110,357 @@
         renderer.shadowMap.enabled = true;
         document.body.appendChild(renderer.domElement);
 
-        // Lighting
         scene.add(new THREE.AmbientLight(0xffffff, 0.55));
         const dirLight = new THREE.DirectionalLight(0xffffff, 0.85);
-        dirLight.position.set(15, 25, 10);
-        dirLight.castShadow = true;
-        dirLight.shadow.mapSize.set(1024, 1024);
-        dirLight.shadow.camera.left = -40;
-        dirLight.shadow.camera.right = 40;
-        dirLight.shadow.camera.top = 40;
-        dirLight.shadow.camera.bottom = -40;
+        dirLight.position.set(15, 25, 10); dirLight.castShadow = true;
+        dirLight.shadow.mapSize.set(1024, 1024); dirLight.shadow.camera.left = -40; dirLight.shadow.camera.right = 40; dirLight.shadow.camera.top = 40; dirLight.shadow.camera.bottom = -40;
         scene.add(dirLight);
 
-        // Ground
         const groundMat = new THREE.MeshStandardMaterial({ color: 0x6fae5e, roughness: 0.95 });
         const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), groundMat);
-        ground.rotation.x = -Math.PI / 2;
-        ground.receiveShadow = true;
-        scene.add(ground);
+        ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
 
         const grid = new THREE.GridHelper(200, 50, 0x000000, 0x000000);
-        grid.material.opacity = 0.08;
-        grid.material.transparent = true;
-        scene.add(grid);
+        grid.material.opacity = 0.08; grid.material.transparent = true; scene.add(grid);
 
-        // ==========================================
-        // WORLD — platforms and trees
-        // ==========================================
         const platforms = [];
-
         function addPlatform(x, y, z, w, d, h, color) {
-            const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.8 });
-            const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
-            mesh.position.set(x, y, z);
-            mesh.castShadow = true;
-            mesh.receiveShadow = true;
-            scene.add(mesh);
+            const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshStandardMaterial({ color, roughness: 0.8 }));
+            mesh.position.set(x, y, z); mesh.castShadow = true; mesh.receiveShadow = true; scene.add(mesh);
             platforms.push({ mesh, halfW: w / 2, halfD: d / 2, topY: y + h / 2 });
         }
-
-        addPlatform(6, 1, -4, 4, 4, 2, 0xe0a458);
-        addPlatform(11, 2.2, -7, 3.5, 3.5, 2, 0xd98c3f);
-        addPlatform(15, 3.6, -3, 3, 3, 2, 0xe0a458);
-        addPlatform(-7, 1.4, -6, 4, 4, 2, 0x7fb3d5);
-        addPlatform(-12, 2.8, -2, 3.5, 3.5, 2, 0x5a9bc4);
-        addPlatform(0, 4.6, -14, 5, 5, 2, 0xc46fb3);
-        addPlatform(8, 1, 9, 4, 4, 2, 0x9bd56f);
-        addPlatform(14, 1, 12, 4, 6, 2, 0x9bd56f);
+        addPlatform(6, 1, -4, 4, 4, 2, 0xe0a458); addPlatform(11, 2.2, -7, 3.5, 3.5, 2, 0xd98c3f); addPlatform(15, 3.6, -3, 3, 3, 2, 0xe0a458);
+        addPlatform(-7, 1.4, -6, 4, 4, 2, 0x7fb3d5); addPlatform(-12, 2.8, -2, 3.5, 3.5, 2, 0x5a9bc4); addPlatform(0, 4.6, -14, 5, 5, 2, 0xc46fb3);
+        addPlatform(8, 1, 9, 4, 4, 2, 0x9bd56f); addPlatform(14, 1, 12, 4, 6, 2, 0x9bd56f);
 
         function addTree(x, z) {
             const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.3, 1.6, 6), new THREE.MeshStandardMaterial({ color: 0x6b4a2f }));
-            trunk.position.set(x, 0.8, z);
-            trunk.castShadow = true;
-            scene.add(trunk);
+            trunk.position.set(x, 0.8, z); trunk.castShadow = true; scene.add(trunk);
             const leaves = new THREE.Mesh(new THREE.ConeGeometry(1.1, 2.2, 8), new THREE.MeshStandardMaterial({ color: 0x3f8f4f }));
-            leaves.position.set(x, 2.4, z);
-            leaves.castShadow = true;
-            scene.add(leaves);
+            leaves.position.set(x, 2.4, z); leaves.castShadow = true; scene.add(leaves);
         }
         for (let i = 0; i < 14; i++) {
-            const a = Math.random() * Math.PI * 2;
-            const r = 18 + Math.random() * 22;
-            addTree(Math.cos(a) * r, Math.sin(a) * r);
+            const a = Math.random() * Math.PI * 2; const r = 18 + Math.random() * 22; addTree(Math.cos(a) * r, Math.sin(a) * r);
         }
 
-        // ==========================================
-        // PLAYER MODEL & STATE
-        // ==========================================
         const players = {};
-
         function makeCapsuleAvatar(color) {
-            const mat = new THREE.MeshStandardMaterial({ color });
-            const group = new THREE.Group();
-
-            const body = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1, 12), mat);
-            body.castShadow = true;
-            group.add(body);
-
-            const topCap = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 8), mat);
-            topCap.position.y = 0.5;
-            topCap.castShadow = true;
-            group.add(topCap);
-
-            const bottomCap = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 8), mat);
-            bottomCap.position.y = -0.5;
-            bottomCap.castShadow = true;
-            group.add(bottomCap);
-
+            const mat = new THREE.MeshStandardMaterial({ color }); const group = new THREE.Group();
+            const body = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1, 12), mat); body.castShadow = true; group.add(body);
+            const topCap = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 8), mat); topCap.position.y = 0.5; topCap.castShadow = true; group.add(topCap);
+            const bottomCap = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 8), mat); bottomCap.position.y = -0.5; bottomCap.castShadow = true; group.add(bottomCap);
             return group;
         }
 
-        const myPlayer = makeCapsuleAvatar(0x00ff88);
-        myPlayer.position.set(0, 1, 4);
-        scene.add(myPlayer);
-
-        let velocityY = 0;
-        let onGround = true;
-        const GRAVITY = -22;
-        const JUMP_SPEED = 9;
-        const GROUND_Y = 1;
-
-        scene.add(camera);
+        const myPlayer = makeCapsuleAvatar(0x00ff88); myPlayer.position.set(0, 1, 4); scene.add(myPlayer);
+        let velocityY = 0; let onGround = true; const GRAVITY = -22; const JUMP_SPEED = 9; const GROUND_Y = 1; scene.add(camera);
 
         // ==========================================
         // 2. MOBILE CONTROLS
         // ==========================================
-        const input = { x: 0, y: 0 };
-        const keyInput = { x: 0, y: 0 };
-        let camYaw = 0;
-        let camPitch = -0.25;
-        let camDist = 6.5;
-        const CAM_DIST_MIN = 2.5, CAM_DIST_MAX = 14;
-        const CAM_HEIGHT = 1.4;
-        const PITCH_MIN = -1.1, PITCH_MAX = 0.9;
+        const input = { x: 0, y: 0 }; const keyInput = { x: 0, y: 0 };
+        let camYaw = 0; let camPitch = -0.25; let camDist = 6.5;
+        const CAM_DIST_MIN = 2.5, CAM_DIST_MAX = 14; const CAM_HEIGHT = 1.4; const PITCH_MIN = -1.1, PITCH_MAX = 0.9;
         const camLookTarget = new THREE.Vector3();
 
         function updateCameraTransform(dt) {
-            const desiredTarget = new THREE.Vector3(
-                myPlayer.position.x,
-                myPlayer.position.y + CAM_HEIGHT,
-                myPlayer.position.z
-            );
-            const smoothing = dt === undefined ? 1 : Math.min(1, dt * 14);
-            camLookTarget.lerp(desiredTarget, smoothing);
-
-            const horizDist = Math.cos(camPitch) * camDist;
-            const height = Math.sin(camPitch) * camDist;
-
-            camera.position.set(
-                camLookTarget.x + horizDist * Math.sin(camYaw),
-                camLookTarget.y + height,
-                camLookTarget.z + horizDist * Math.cos(camYaw)
-            );
+            const desiredTarget = new THREE.Vector3(myPlayer.position.x, myPlayer.position.y + CAM_HEIGHT, myPlayer.position.z);
+            camLookTarget.lerp(desiredTarget, dt === undefined ? 1 : Math.min(1, dt * 14));
+            const horizDist = Math.cos(camPitch) * camDist; const height = Math.sin(camPitch) * camDist;
+            camera.position.set(camLookTarget.x + horizDist * Math.sin(camYaw), camLookTarget.y + height, camLookTarget.z + horizDist * Math.cos(camYaw));
             camera.lookAt(camLookTarget);
         }
 
-        // ---------- Joystick ----------
-        const joyZone = document.getElementById('joystick-zone');
-        const joyKnob = document.getElementById('joystick-knob');
-        let joyTouchId = null;
-        let joyCenter = { x: 0, y: 0 };
-        const JOY_RADIUS = 55;
+        const joyZone = document.getElementById('joystick-zone'); const joyKnob = document.getElementById('joystick-knob');
+        let joyTouchId = null; let joyCenter = { x: 0, y: 0 }; const JOY_RADIUS = 55;
 
-        function resetJoystick() {
-            joyTouchId = null;
-            joyKnob.style.transform = `translate(-50%, -50%)`;
-            input.x = 0; input.y = 0;
-        }
-
+        function resetJoystick() { joyTouchId = null; joyKnob.style.transform = `translate(-50%, -50%)`; input.x = 0; input.y = 0; }
         function moveJoystickKnob(touch) {
-            let dx = touch.clientX - joyCenter.x;
-            let dy = touch.clientY - joyCenter.y;
-            const distance = Math.min(Math.sqrt(dx * dx + dy * dy), JOY_RADIUS);
-            const angle = Math.atan2(dy, dx);
-            const knobX = Math.cos(angle) * distance;
-            const knobY = Math.sin(angle) * distance;
+            let dx = touch.clientX - joyCenter.x; let dy = touch.clientY - joyCenter.y;
+            const distance = Math.min(Math.sqrt(dx * dx + dy * dy), JOY_RADIUS); const angle = Math.atan2(dy, dx);
+            const knobX = Math.cos(angle) * distance; const knobY = Math.sin(angle) * distance;
             joyKnob.style.transform = `translate(calc(-50% + ${knobX}px), calc(-50% + ${knobY}px))`;
-            input.x = knobX / JOY_RADIUS;
-            input.y = knobY / JOY_RADIUS;
+            input.x = knobX / JOY_RADIUS; input.y = knobY / JOY_RADIUS;
         }
 
-        joyZone.addEventListener('touchstart', (e) => {
-            if (joyTouchId !== null) return;
-            const t = e.changedTouches[0];
-            const rect = joyZone.getBoundingClientRect();
-            joyCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-            joyTouchId = t.identifier;
-            moveJoystickKnob(t);
-            e.preventDefault();
-        }, { passive: false });
-
-        window.addEventListener('touchmove', (e) => {
-            if (joyTouchId === null) return;
-            for (const t of e.changedTouches) {
-                if (t.identifier === joyTouchId) { moveJoystickKnob(t); e.preventDefault(); }
-            }
-        }, { passive: false });
-
-        function endJoystickTouch(e) {
-            for (const t of e.changedTouches) {
-                if (t.identifier === joyTouchId) resetJoystick();
-            }
-        }
-        window.addEventListener('touchend', endJoystickTouch);
-        window.addEventListener('touchcancel', endJoystickTouch);
+        joyZone.addEventListener('touchstart', (e) => { if (joyTouchId !== null) return; const t = e.changedTouches[0]; const rect = joyZone.getBoundingClientRect(); joyCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }; joyTouchId = t.identifier; moveJoystickKnob(t); e.preventDefault(); }, { passive: false });
+        window.addEventListener('touchmove', (e) => { if (joyTouchId === null) return; for (const t of e.changedTouches) { if (t.identifier === joyTouchId) { moveJoystickKnob(t); e.preventDefault(); } } }, { passive: false });
+        function endJoystickTouch(e) { for (const t of e.changedTouches) { if (t.identifier === joyTouchId) resetJoystick(); } }
+        window.addEventListener('touchend', endJoystickTouch); window.addEventListener('touchcancel', endJoystickTouch);
 
         let joyMouseDown = false;
-        joyZone.addEventListener('mousedown', (e) => {
-            const rect = joyZone.getBoundingClientRect();
-            joyCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-            joyMouseDown = true;
-            moveJoystickKnob(e);
-        });
+        joyZone.addEventListener('mousedown', (e) => { const rect = joyZone.getBoundingClientRect(); joyCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }; joyMouseDown = true; moveJoystickKnob(e); });
         window.addEventListener('mousemove', (e) => { if (joyMouseDown) moveJoystickKnob(e); });
         window.addEventListener('mouseup', () => { if (joyMouseDown) { joyMouseDown = false; resetJoystick(); } });
 
-        // ---------- Jump button ----------
-        const jumpZone = document.getElementById('jump-zone');
-        let jumpTouchId = null;
-        let jumpRequested = false;
+        const jumpZone = document.getElementById('jump-zone'); let jumpTouchId = null; let jumpRequested = false;
+        function pressJump(e) { if (jumpTouchId !== null) return; jumpTouchId = e.changedTouches ? e.changedTouches[0].identifier : 'mouse'; jumpRequested = true; jumpZone.classList.add('pressed'); e.preventDefault(); e.stopPropagation(); }
+        function releaseJump(e) { if (e.changedTouches) { for (const t of e.changedTouches) { if (t.identifier === jumpTouchId) jumpTouchId = null; } } else { jumpTouchId = null; } jumpZone.classList.remove('pressed'); }
+        jumpZone.addEventListener('touchstart', pressJump, { passive: false }); jumpZone.addEventListener('touchend', releaseJump); jumpZone.addEventListener('touchcancel', releaseJump); jumpZone.addEventListener('mousedown', pressJump); jumpZone.addEventListener('mouseup', releaseJump);
 
-        function pressJump(e) {
-            if (jumpTouchId !== null) return;
-            jumpTouchId = e.changedTouches ? e.changedTouches[0].identifier : 'mouse';
-            jumpRequested = true;
-            jumpZone.classList.add('pressed');
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        function releaseJump(e) {
-            const id = e.changedTouches ? e.changedTouches[0].identifier : 'mouse';
-            if (e.changedTouches) {
-                for (const t of e.changedTouches) { if (t.identifier === jumpTouchId) jumpTouchId = null; }
-            } else {
-                jumpTouchId = null;
-            }
-            jumpZone.classList.remove('pressed');
-        }
-        jumpZone.addEventListener('touchstart', pressJump, { passive: false });
-        jumpZone.addEventListener('touchend', releaseJump);
-        jumpZone.addEventListener('touchcancel', releaseJump);
-        jumpZone.addEventListener('mousedown', pressJump);
-        jumpZone.addEventListener('mouseup', releaseJump);
-
-        // ---------- PC keyboard ----------
         const heldKeys = new Set();
         window.addEventListener('keydown', (e) => {
             if (e.code === 'Space') { jumpRequested = true; e.preventDefault(); }
-            if (e.code === 'Enter' && document.activeElement !== chatInput) {
-                e.preventDefault();
-                toggleChat(true);
-                return;
-            }
-            if (e.code === 'Escape' && chatOpen) {
-                toggleChat(false);
-                return;
-            }
-            heldKeys.add(e.code);
-            updateKeyInput();
+            if (e.code === 'Enter' && document.activeElement !== chatInput) { e.preventDefault(); toggleChat(true); return; }
+            if (e.code === 'Escape' && chatOpen) { toggleChat(false); return; }
+            heldKeys.add(e.code); updateKeyInput();
         });
-        window.addEventListener('keyup', (e) => {
-            heldKeys.delete(e.code);
-            updateKeyInput();
-        });
+        window.addEventListener('keyup', (e) => { heldKeys.delete(e.code); updateKeyInput(); });
         window.addEventListener('blur', () => { heldKeys.clear(); updateKeyInput(); });
-
         function updateKeyInput() {
             let x = 0, y = 0;
-            if (heldKeys.has('KeyA') || heldKeys.has('ArrowLeft'))  x -= 1;
-            if (heldKeys.has('KeyD') || heldKeys.has('ArrowRight')) x += 1;
-            if (heldKeys.has('KeyW') || heldKeys.has('ArrowUp'))    y -= 1;
-            if (heldKeys.has('KeyS') || heldKeys.has('ArrowDown'))  y += 1;
-            if (x !== 0 && y !== 0) { const n = Math.SQRT1_2; x *= n; y *= n; }
-            keyInput.x = x; keyInput.y = y;
+            if (heldKeys.has('KeyA') || heldKeys.has('ArrowLeft')) x -= 1; if (heldKeys.has('KeyD') || heldKeys.has('ArrowRight')) x += 1;
+            if (heldKeys.has('KeyW') || heldKeys.has('ArrowUp')) y -= 1; if (heldKeys.has('KeyS') || heldKeys.has('ArrowDown')) y += 1;
+            if (x !== 0 && y !== 0) { const n = Math.SQRT1_2; x *= n; y *= n; } keyInput.x = x; keyInput.y = y;
         }
 
-        // ---------- Camera drag ----------
-        const camZone = document.getElementById('camera-zone');
-        const camTouches = {};
-
+        const camZone = document.getElementById('camera-zone'); const camTouches = {};
         function belongsToControl(target) { return joyZone.contains(target) || jumpZone.contains(target); }
 
-        camZone.addEventListener('touchstart', (e) => {
-            for (const t of e.changedTouches) {
-                if (belongsToControl(t.target)) continue;
-                camTouches[t.identifier] = { x: t.clientX, y: t.clientY };
-            }
-        }, { passive: true });
-
+        camZone.addEventListener('touchstart', (e) => { for (const t of e.changedTouches) { if (belongsToControl(t.target)) continue; camTouches[t.identifier] = { x: t.clientX, y: t.clientY }; } }, { passive: true });
         camZone.addEventListener('touchmove', (e) => {
             let used = false;
             for (const t of e.changedTouches) {
-                const prev = camTouches[t.identifier];
-                if (!prev) continue;
-                used = true;
-                const deltaX = t.clientX - prev.x;
-                const deltaY = t.clientY - prev.y;
-                camYaw -= deltaX * 0.0065;
-                camPitch -= deltaY * 0.0055;
-                camPitch = Math.max(PITCH_MIN, Math.min(PITCH_MAX, camPitch));
-                camTouches[t.identifier] = { x: t.clientX, y: t.clientY };
+                const prev = camTouches[t.identifier]; if (!prev) continue; used = true;
+                camYaw -= (t.clientX - prev.x) * 0.0065; camPitch -= (t.clientY - prev.y) * 0.0055;
+                camPitch = Math.max(PITCH_MIN, Math.min(PITCH_MAX, camPitch)); camTouches[t.identifier] = { x: t.clientX, y: t.clientY };
             }
             if (used) e.preventDefault();
         }, { passive: false });
-
         function clearCamTouch(e) { for (const t of e.changedTouches) delete camTouches[t.identifier]; }
-        camZone.addEventListener('touchend', clearCamTouch);
-        camZone.addEventListener('touchcancel', clearCamTouch);
+        camZone.addEventListener('touchend', clearCamTouch); camZone.addEventListener('touchcancel', clearCamTouch);
 
-        let mouseDragging = false;
-        let lastMouse = { x: 0, y: 0 };
-        camZone.addEventListener('mousedown', (e) => {
-            if (belongsToControl(e.target)) return;
-            mouseDragging = true;
-            lastMouse = { x: e.clientX, y: e.clientY };
-        });
+        let mouseDragging = false; let lastMouse = { x: 0, y: 0 };
+        camZone.addEventListener('mousedown', (e) => { if (belongsToControl(e.target)) return; mouseDragging = true; lastMouse = { x: e.clientX, y: e.clientY }; });
         window.addEventListener('mousemove', (e) => {
             if (!mouseDragging || isPointerLocked()) return;
-            const deltaX = e.clientX - lastMouse.x;
-            const deltaY = e.clientY - lastMouse.y;
-            camYaw -= deltaX * 0.0065;
-            camPitch -= deltaY * 0.0055;
-            camPitch = Math.max(PITCH_MIN, Math.min(PITCH_MAX, camPitch));
-            lastMouse = { x: e.clientX, y: e.clientY };
+            camYaw -= (e.clientX - lastMouse.x) * 0.0065; camPitch -= (e.clientY - lastMouse.y) * 0.0055;
+            camPitch = Math.max(PITCH_MIN, Math.min(PITCH_MAX, camPitch)); lastMouse = { x: e.clientX, y: e.clientY };
         });
         window.addEventListener('mouseup', () => { mouseDragging = false; });
 
-        // ---------- Pointer Lock ----------
-        const lockHint = document.getElementById('lock-hint');
         function isPointerLocked() { return document.pointerLockElement === renderer.domElement; }
-
-        camZone.addEventListener('click', (e) => {
-            if (belongsToControl(e.target) || chatOpen) return;
-            if (!isPointerLocked() && renderer.domElement.requestPointerLock) {
-                renderer.domElement.requestPointerLock();
-            }
-        });
-
-        document.addEventListener('pointerlockchange', () => {
-            if (lockHint) lockHint.style.display = isPointerLocked() ? 'none' : '';
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            if (!isPointerLocked()) return;
-            camYaw -= e.movementX * 0.0028;
-            camPitch -= e.movementY * 0.0028;
-            camPitch = Math.max(PITCH_MIN, Math.min(PITCH_MAX, camPitch));
-        });
-
-        camZone.addEventListener('wheel', (e) => {
-            camDist += e.deltaY * 0.0045 * camDist;
-            camDist = Math.max(CAM_DIST_MIN, Math.min(CAM_DIST_MAX, camDist));
-        }, { passive: true });
+        const lockHint = document.getElementById('lock-hint');
+        camZone.addEventListener('click', (e) => { if (belongsToControl(e.target) || chatOpen) return; if (!isPointerLocked() && renderer.domElement.requestPointerLock) renderer.domElement.requestPointerLock(); });
+        document.addEventListener('pointerlockchange', () => { if (lockHint) lockHint.style.display = isPointerLocked() ? 'none' : ''; });
+        window.addEventListener('mousemove', (e) => { if (!isPointerLocked()) return; camYaw -= e.movementX * 0.0028; camPitch -= e.movementY * 0.0028; camPitch = Math.max(PITCH_MIN, Math.min(PITCH_MAX, camPitch)); });
+        camZone.addEventListener('wheel', (e) => { camDist += e.deltaY * 0.0045 * camDist; camDist = Math.max(CAM_DIST_MIN, Math.min(CAM_DIST_MAX, camDist)); }, { passive: true });
 
         // ==========================================
         // 3. GLOBAL CHAT SYSTEM & 3D BUBBLES
         // ==========================================
-        const chatContainer = document.getElementById('chat-container');
-        const chatMessages = document.getElementById('chat-messages');
-        const chatInput = document.getElementById('chat-input');
-        const chatSendBtn = document.getElementById('chat-send-btn');
-        const chatToggleBtn = document.getElementById('chat-toggle-btn');
-        const chatBadge = document.getElementById('chat-badge');
-        const cooldownBar = document.getElementById('chat-cooldown-bar');
-
-        const bubblesContainer = document.getElementById('bubbles-container');
-        const activeBubbles = {}; // Stores { div, targetMesh, endTime }
-
-        const CHAT_COOLDOWN_MS = 2000; 
-        const CHAT_MAX_HISTORY = 50;   
-        let chatOpen = true;
-        chatToggleBtn.style.display = 'none';
-        let lastChatTime = 0;
-        let unreadCount = 0;
-        let cooldownTimer = null;
+        const chatContainer = document.getElementById('chat-container'); const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input'); const chatSendBtn = document.getElementById('chat-send-btn');
+        const chatToggleBtn = document.getElementById('chat-toggle-btn'); const chatBadge = document.getElementById('chat-badge');
+        const cooldownBar = document.getElementById('chat-cooldown-bar'); const bubblesContainer = document.getElementById('bubbles-container');
+        const activeBubbles = {}; const CHAT_COOLDOWN_MS = 2000; const CHAT_MAX_HISTORY = 50;   
+        let chatOpen = true; chatToggleBtn.style.display = 'none'; let lastChatTime = 0; let unreadCount = 0; let cooldownTimer = null;
 
         function toggleChat(forceOpen) {
             chatOpen = forceOpen !== undefined ? forceOpen : !chatOpen;
             if (chatOpen) {
-                chatContainer.classList.remove('chat-hidden');
-                chatToggleBtn.style.display = 'none';
-                unreadCount = 0;
-                chatBadge.textContent = '0';
-                chatBadge.classList.remove('show');
-                setTimeout(() => chatInput.focus(), 50);
+                chatContainer.classList.remove('chat-hidden'); chatToggleBtn.style.display = 'none'; unreadCount = 0;
+                chatBadge.textContent = '0'; chatBadge.classList.remove('show'); setTimeout(() => chatInput.focus(), 50);
                 if (isPointerLocked() && document.exitPointerLock) document.exitPointerLock();
-            } else {
-                chatContainer.classList.add('chat-hidden');
-                chatToggleBtn.style.display = 'flex';
-                chatInput.blur();
-            }
+            } else { chatContainer.classList.add('chat-hidden'); chatToggleBtn.style.display = 'flex'; chatInput.blur(); }
         }
-
         chatToggleBtn.addEventListener('click', () => toggleChat(true));
-
-        function escapeHtml(text) {
-            const div = document.createElement('div'); div.textContent = text; return div.innerHTML;
-        }
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
         function shortId(id) { return id ? id.slice(0, 6) : '??????'; }
 
-        // --- Over-head Bubble Logic ---
         function showBubble(id, text, targetMesh) {
-            if (!activeBubbles[id]) {
-                const div = document.createElement('div');
-                div.className = 'head-bubble';
-                bubblesContainer.appendChild(div);
-                activeBubbles[id] = { div, targetMesh };
-            }
-            activeBubbles[id].div.textContent = text;
-            activeBubbles[id].div.style.opacity = 1;
-            activeBubbles[id].endTime = Date.now() + 4500; // Stay visible for 4.5s
+            if (!activeBubbles[id]) { const div = document.createElement('div'); div.className = 'head-bubble'; bubblesContainer.appendChild(div); activeBubbles[id] = { div, targetMesh }; }
+            activeBubbles[id].div.textContent = text; activeBubbles[id].div.style.opacity = 1; activeBubbles[id].endTime = Date.now() + 4500;
         }
 
         function addChatMessage(text, type, senderId) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'chat-msg' + (type ? ' ' + type : '');
-
-            if (type === 'system') {
-                msgDiv.textContent = text;
-            } else if (type === 'join') {
-                msgDiv.textContent = `> ${shortId(senderId)} joined the game`;
-            } else if (type === 'leave') {
-                msgDiv.textContent = `> ${shortId(senderId)} left the game`;
-            } else {
-                const isHost = senderId === 'host' || (isHostFlag && senderId === myId);
-                const senderClass = isHost ? 'sender-host' : 'sender';
-                const displayId = isHost ? 'HOST' : shortId(senderId);
+            const msgDiv = document.createElement('div'); msgDiv.className = 'chat-msg' + (type ? ' ' + type : '');
+            if (type === 'system') { msgDiv.textContent = text; } else if (type === 'join') { msgDiv.textContent = `> ${shortId(senderId)} joined the game`; } else if (type === 'leave') { msgDiv.textContent = `> ${shortId(senderId)} left the game`; } else {
+                const isHost = senderId === 'host' || (isHostFlag && senderId === myId); const senderClass = isHost ? 'sender-host' : 'sender'; const displayId = isHost ? 'HOST' : shortId(senderId);
                 msgDiv.innerHTML = `<span class="${senderClass}">${escapeHtml(displayId)}:</span> ${escapeHtml(text)}`;
             }
-
-            chatMessages.appendChild(msgDiv);
-            while (chatMessages.children.length > CHAT_MAX_HISTORY) {
-                chatMessages.removeChild(chatMessages.firstChild);
-            }
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            if (!chatOpen && type !== 'join' && type !== 'leave' && senderId !== myId) {
-                unreadCount++;
-                chatBadge.textContent = unreadCount > 9 ? '9+' : unreadCount;
-                chatBadge.classList.add('show');
-            }
+            chatMessages.appendChild(msgDiv); while (chatMessages.children.length > CHAT_MAX_HISTORY) chatMessages.removeChild(chatMessages.firstChild); chatMessages.scrollTop = chatMessages.scrollHeight;
+            if (!chatOpen && type !== 'join' && type !== 'leave' && senderId !== myId) { unreadCount++; chatBadge.textContent = unreadCount > 9 ? '9+' : unreadCount; chatBadge.classList.add('show'); }
         }
 
         function startCooldown() {
-            lastChatTime = Date.now();
-            chatSendBtn.disabled = true; chatSendBtn.textContent = 'Wait...';
-            cooldownBar.classList.add('cooling');
+            lastChatTime = Date.now(); chatSendBtn.disabled = true; chatSendBtn.textContent = 'Wait...'; cooldownBar.classList.add('cooling');
             if (cooldownTimer) clearInterval(cooldownTimer);
-
             cooldownTimer = setInterval(() => {
-                const elapsed = Date.now() - lastChatTime;
-                const remaining = Math.max(0, CHAT_COOLDOWN_MS - elapsed);
+                const remaining = Math.max(0, CHAT_COOLDOWN_MS - (Date.now() - lastChatTime));
                 cooldownBar.style.width = ((remaining / CHAT_COOLDOWN_MS) * 100) + '%';
-                if (remaining <= 0) {
-                    clearInterval(cooldownTimer); cooldownTimer = null;
-                    chatSendBtn.disabled = false; chatSendBtn.textContent = 'Send';
-                    cooldownBar.classList.remove('cooling');
-                    cooldownBar.style.width = '100%';
-                }
+                if (remaining <= 0) { clearInterval(cooldownTimer); cooldownTimer = null; chatSendBtn.disabled = false; chatSendBtn.textContent = 'Send'; cooldownBar.classList.remove('cooling'); cooldownBar.style.width = '100%'; }
             }, 50);
         }
 
         function sendChatMessage() {
-            const text = chatInput.value.trim();
-            if (!text) return;
-            if (Date.now() - lastChatTime < CHAT_COOLDOWN_MS) {
-                chatInput.style.animation = 'none'; chatInput.offsetHeight;
-                chatInput.style.animation = 'msgIn 0.2s ease-out';
-                return;
-            }
-
+            const text = chatInput.value.trim(); if (!text) return;
+            if (Date.now() - lastChatTime < CHAT_COOLDOWN_MS) { chatInput.style.animation = 'none'; chatInput.offsetHeight; chatInput.style.animation = 'msgIn 0.2s ease-out'; return; }
             const packet = { type: 'chat', text: text, sender: myId };
-            if (isHostFlag) {
-                relayChatToClients(text, myId);
-                addChatMessage(text, '', myId);
-            } else if (hostConnection && hostConnection.open) {
-                hostConnection.send(packet);
-                addChatMessage(text, '', myId);
-            } else {
-                addChatMessage(text, '', myId);
-            }
-
-            showBubble('me', text, myPlayer); // Trigger own bubble
-            chatInput.value = '';
-            startCooldown();
+            if (isHostFlag) { relayChatToClients(text, myId); addChatMessage(text, '', myId); } else if (hostConnection && hostConnection.open) { hostConnection.send(packet); addChatMessage(text, '', myId); } else { addChatMessage(text, '', myId); }
+            showBubble('me', text, myPlayer); chatInput.value = ''; startCooldown();
         }
 
-        function relayChatToClients(text, senderId) {
-            const packet = { type: 'chat', text: text, sender: senderId };
-            hostClients.forEach(c => { if (c.open) c.send(packet); });
-        }
-        function relaySystemMsg(text, msgType, senderId) {
-            const packet = { type: 'sys', text: text, msgType: msgType, sender: senderId };
-            hostClients.forEach(c => { if (c.open) c.send(packet); });
-        }
+        function relayChatToClients(text, senderId) { const packet = { type: 'chat', text: text, sender: senderId }; hostClients.forEach(c => { if (c.open) c.send(packet); }); }
+        function relaySystemMsg(text, msgType, senderId) { const packet = { type: 'sys', text: text, msgType: msgType, sender: senderId }; hostClients.forEach(c => { if (c.open) c.send(packet); }); }
 
         chatSendBtn.addEventListener('click', sendChatMessage);
-        chatInput.addEventListener('keydown', (e) => {
-            if (e.code === 'Enter') { e.preventDefault(); sendChatMessage(); }
-            if (e.code === 'Escape') { toggleChat(false); }
-        });
+        chatInput.addEventListener('keydown', (e) => { if (e.code === 'Enter') { e.preventDefault(); sendChatMessage(); } if (e.code === 'Escape') toggleChat(false); });
 
         // ==========================================
-        // 4. NETWORKING (HOST-RELAY)
+        // 4. NETWORKING & AUTO RECONNECT
         // ==========================================
         const GLOBAL_ROOM_ID = "awesome-mobile-game-room-1";
-        let isHostFlag = false;
-        let hostConnection = null;
-        let hostClients = [];
-        let myId = null;
-
-        let peer = new Peer(GLOBAL_ROOM_ID);
-        const statusEl = document.getElementById('status');
-        const statusDot = document.getElementById('status-dot');
+        let isHostFlag = false; let hostConnection = null; let hostClients = []; let myId = null; let peer = null; let isReconnecting = false;
+        const statusEl = document.getElementById('status'); const statusDot = document.getElementById('status-dot');
         function setStatus(text, state) { statusEl.textContent = text; statusDot.className = state; }
 
-        peer.on('open', (id) => {
-            isHostFlag = true; myId = id;
-            setStatus('Hosting Global Game', 'online');
-            addChatMessage('You are the HOST. Others join automatically.', 'system');
-        });
+        function initPeer() {
+            if (peer) peer.destroy();
+            peer = new Peer(GLOBAL_ROOM_ID);
+            peer.on('open', (id) => { isHostFlag = true; myId = id; setStatus('Hosting Global Game', 'online'); addChatMessage('You are the HOST. Others join automatically.', 'system'); });
+            
+            peer.on('error', (err) => {
+                if (err && err.type === 'unavailable-id') {
+                    isHostFlag = false; peer = new Peer();
+                    peer.on('open', (id) => { myId = id; connectToHost(); });
+                    peer.on('error', () => { setStatus('Offline (solo mode)', 'offline'); scheduleReconnect(); });
+                } else if (!isHostFlag) { setStatus('Offline (solo mode)', 'offline'); scheduleReconnect(); }
+            });
 
-        peer.on('error', (err) => {
-            if (err && err.type === 'unavailable-id') {
-                peer = new Peer();
-                peer.on('open', (id) => {
-                    myId = id;
-                    hostConnection = peer.connect(GLOBAL_ROOM_ID, { reliable: false, serialization: 'json', ordered: false });
-                    setupClientNetworking();
+            peer.on('connection', (conn) => {
+                if (!isHostFlag) return;
+                hostClients.push(conn); addChatMessage('', 'join', conn.peer); relaySystemMsg('', 'join', conn.peer);
+                conn.on('data', (data) => {
+                    if (!data || typeof data !== 'object') return;
+                    if (data.type === 'chat' && data.text && data.sender) { relayChatToClients(data.text, data.sender); addChatMessage(data.text, '', data.sender); if (players[data.sender]) showBubble(data.sender, data.text, players[data.sender].mesh); return; }
+                    if (Array.isArray(data) && data.length >= 3) {
+                        const payload = [conn.peer, data[0], data[1], data[2]]; updateRemotePlayer(payload);
+                        hostClients.forEach(c => { if (c.peer !== conn.peer && c.open) c.send(payload); });
+                    }
                 });
-                peer.on('error', () => setStatus('Offline (solo mode)', 'offline'));
-            } else if (!isHostFlag) {
-                setStatus('Offline (solo mode)', 'offline');
-            }
-        });
-
-        peer.on('connection', (conn) => {
-            if (!isHostFlag) return;
-            hostClients.push(conn);
-            addChatMessage('', 'join', conn.peer); relaySystemMsg('', 'join', conn.peer);
-
-            conn.on('data', (data) => {
-                if (!data || typeof data !== 'object') return;
-                
-                if (data.type === 'chat' && data.text && data.sender) {
-                    relayChatToClients(data.text, data.sender);
-                    addChatMessage(data.text, '', data.sender);
-                    if (players[data.sender]) showBubble(data.sender, data.text, players[data.sender].mesh);
-                    return;
-                }
-                if (Array.isArray(data) && data.length >= 3) {
-                    const payload = [conn.peer, data[0], data[1], data[2]];
-                    updateRemotePlayer(payload);
-                    hostClients.forEach(c => { if (c.peer !== conn.peer && c.open) c.send(payload); });
-                }
+                conn.on('close', () => removeHostClient(conn.peer));
             });
+        }
 
-            conn.on('close', () => {
-                hostClients = hostClients.filter(c => c.peer !== conn.peer);
-                addChatMessage('', 'leave', conn.peer); relaySystemMsg('', 'leave', conn.peer);
-                if (players[conn.peer]) { scene.remove(players[conn.peer].mesh); delete players[conn.peer]; }
-                if (activeBubbles[conn.peer]) { activeBubbles[conn.peer].div.remove(); delete activeBubbles[conn.peer]; }
-            });
-        });
-
-        function setupClientNetworking() {
-            hostConnection.on('open', () => {
-                setStatus('Joined Global Game', 'online');
-                addChatMessage('Connected to global room!', 'system');
-            });
+        function connectToHost() {
+            setStatus('Connecting to Host...', 'offline');
+            hostConnection = peer.connect(GLOBAL_ROOM_ID, { reliable: false, serialization: 'json', ordered: false });
+            hostConnection.on('open', () => { setStatus('Joined Global Game', 'online'); addChatMessage('Connected to global room!', 'system'); isReconnecting = false; lastSentPos = null; });
             hostConnection.on('data', (payload) => {
                 if (!payload || typeof payload !== 'object') return;
-
-                if (payload.type === 'chat' && payload.text && payload.sender) {
-                    addChatMessage(payload.text, '', payload.sender);
-                    if (payload.sender !== myId && players[payload.sender]) {
-                        showBubble(payload.sender, payload.text, players[payload.sender].mesh);
-                    }
-                    return;
-                }
-                if (payload.type === 'sys' && payload.msgType) {
-                    addChatMessage('', payload.msgType, payload.sender); return;
-                }
+                if (payload.type === 'chat' && payload.text && payload.sender) { addChatMessage(payload.text, '', payload.sender); if (payload.sender !== myId && players[payload.sender]) showBubble(payload.sender, payload.text, players[payload.sender].mesh); return; }
+                if (payload.type === 'sys' && payload.msgType) { addChatMessage('', payload.msgType, payload.sender); return; }
                 if (Array.isArray(payload) && payload.length >= 4) { updateRemotePlayer(payload); }
             });
-            hostConnection.on('close', () => {
-                setStatus('Disconnected (solo mode)', 'offline'); addChatMessage('Disconnected from host.', 'system');
-            });
+            hostConnection.on('close', () => { setStatus('Disconnected', 'offline'); addChatMessage('Disconnected from host.', 'system'); scheduleReconnect(); });
         }
 
+        function scheduleReconnect() {
+            if (isReconnecting || isHostFlag) return; isReconnecting = true;
+            setTimeout(() => { addChatMessage('Attempting to reconnect...', 'system'); initPeer(); }, 5000);
+        }
+
+        function removeHostClient(id) {
+            hostClients = hostClients.filter(c => c.peer !== id); addChatMessage('', 'leave', id); relaySystemMsg('', 'leave', id);
+            if (players[id]) { scene.remove(players[id].mesh); delete players[id]; }
+            if (activeBubbles[id]) { activeBubbles[id].div.remove(); delete activeBubbles[id]; }
+        }
+
+        initPeer();
+
         // ==========================================
-        // 5. LERP & NETWORK TICK RATE
+        // 5. LERP & NETWORK HEARTBEAT
         // ==========================================
         const REMOTE_COLORS = [0xff5252, 0x5c8dff, 0xffb347, 0xb06fff, 0xff6fb0, 0x6fffe0];
-        function colorForId(id) {
-            let h = 0; for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
-            return REMOTE_COLORS[h % REMOTE_COLORS.length];
-        }
+        function colorForId(id) { let h = 0; for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0; return REMOTE_COLORS[h % REMOTE_COLORS.length]; }
 
         function updateRemotePlayer(data) {
             const id = data[0];
             if (!players[id]) {
                 const mesh = makeCapsuleAvatar(colorForId(id)); scene.add(mesh);
-                players[id] = { mesh, targetX: data[1], targetY: data[2], targetZ: data[3], targetYaw: 0 };
+                players[id] = { mesh, targetX: data[1], targetY: data[2], targetZ: data[3], targetYaw: 0, lastUpdate: Date.now() };
             }
-            const p = players[id];
+            const p = players[id]; p.lastUpdate = Date.now(); // Mark as alive
             const dx = data[1] - p.targetX, dz = data[3] - p.targetZ;
             if (Math.abs(dx) > 0.001 || Math.abs(dz) > 0.001) p.targetYaw = Math.atan2(dx, dz);
             p.targetX = data[1]; p.targetY = data[2]; p.targetZ = data[3];
         }
 
-        let netTickAccum = 0; let lastSentPos = null;
-        const NET_TICK_RATE = 20, NET_DEADZONE = 0.02;
+        let netTickAccum = 0; let lastSentPos = null; let lastHeartbeatTime = 0;
+        const NET_TICK_RATE = 20, NET_DEADZONE = 0.02, HEARTBEAT_INTERVAL = 1000;
 
         function networkTick(dt) {
-            netTickAccum += dt;
-            if (netTickAccum < 1 / NET_TICK_RATE) return;
-            netTickAccum = 0;
-            if (!isHostFlag && (!hostConnection || !hostConnection.open)) return;
-            if (isHostFlag && hostClients.length === 0) return;
+            netTickAccum += dt; if (netTickAccum < 1 / NET_TICK_RATE) return; netTickAccum = 0;
+            if (!isHostFlag && (!hostConnection || !hostConnection.open)) return; if (isHostFlag && hostClients.length === 0) return;
 
-            const x = Math.round(myPlayer.position.x * 100) / 100;
-            const y = Math.round(myPlayer.position.y * 100) / 100;
-            const z = Math.round(myPlayer.position.z * 100) / 100;
+            const x = Math.round(myPlayer.position.x * 100) / 100; const y = Math.round(myPlayer.position.y * 100) / 100; const z = Math.round(myPlayer.position.z * 100) / 100;
+            const now = Date.now(); const forceHeartbeat = (now - lastHeartbeatTime) > HEARTBEAT_INTERVAL;
 
-            if (lastSentPos && Math.abs(lastSentPos[0] - x) < NET_DEADZONE &&
-                Math.abs(lastSentPos[1] - y) < NET_DEADZONE && Math.abs(lastSentPos[2] - z) < NET_DEADZONE) return;
+            if (!forceHeartbeat && lastSentPos && Math.abs(lastSentPos[0] - x) < NET_DEADZONE && Math.abs(lastSentPos[1] - y) < NET_DEADZONE && Math.abs(lastSentPos[2] - z) < NET_DEADZONE) return;
             
-            lastSentPos = [x, y, z];
-            const packet = [x, y, z];
-
-            if (isHostFlag) {
-                const hostPayload = ['host', ...packet];
-                hostClients.forEach(c => { if (c.open) c.send(hostPayload); });
-            } else if (hostConnection && hostConnection.open) {
-                hostConnection.send(packet);
-            }
+            lastSentPos = [x, y, z]; lastHeartbeatTime = now; const packet = [x, y, z];
+            if (isHostFlag) { const hostPayload = ['host', ...packet]; hostClients.forEach(c => { if (c.open) c.send(hostPayload); }); } else if (hostConnection && hostConnection.open) { hostConnection.send(packet); }
         }
 
         // ==========================================
         // 6. GAME LOOP & MOVEMENT
         // ==========================================
-        const speed = 6.5;
-        const clock = new THREE.Clock();
-        const projVector = new THREE.Vector3(); // Used for projecting bubbles
-
-        function groundHeightAt(x, z) {
-            let best = 0;
-            for (const p of platforms) {
-                if (x > p.mesh.position.x - p.halfW && x < p.mesh.position.x + p.halfW &&
-                    z > p.mesh.position.z - p.halfD && z < p.mesh.position.z + p.halfD) {
-                    if (p.topY > best) best = p.topY;
-                }
-            }
-            return best;
-        }
+        const speed = 6.5; const clock = new THREE.Clock(); const projVector = new THREE.Vector3();
+        function groundHeightAt(x, z) { let best = 0; for (const p of platforms) { if (x > p.mesh.position.x - p.halfW && x < p.mesh.position.x + p.halfW && z > p.mesh.position.z - p.halfD && z < p.mesh.position.z + p.halfD) { if (p.topY > best) best = p.topY; } } return best; }
 
         function updateBubbles2D() {
-            const now = Date.now();
-            const halfW = window.innerWidth / 2;
-            const halfH = window.innerHeight / 2;
-
+            const now = Date.now(); const halfW = window.innerWidth / 2; const halfH = window.innerHeight / 2;
             for (const id in activeBubbles) {
                 const b = activeBubbles[id];
                 if (now > b.endTime) {
                     b.div.style.opacity = 0;
-                    if (now > b.endTime + 250 && b.div.parentNode) {
-                        b.div.parentNode.removeChild(b.div);
-                        delete activeBubbles[id];
-                    }
+                    if (now > b.endTime + 250 && b.div.parentNode) { b.div.parentNode.removeChild(b.div); delete activeBubbles[id]; }
                     continue;
                 }
-                
-                // Track mesh position slightly overhead
-                projVector.copy(b.targetMesh.position);
-                projVector.y += 1.25; 
-                projVector.project(camera); // Convert 3D pos to normalized 2D space (-1 to +1)
-
-                // Hide bubble if behind the camera
-                if (projVector.z > 1) {
-                    b.div.style.display = 'none';
-                } else {
-                    b.div.style.display = 'block';
-                    // Map to absolute CSS pixels
-                    b.div.style.left = `${(projVector.x * halfW) + halfW}px`;
-                    b.div.style.top = `${-(projVector.y * halfH) + halfH}px`;
-                }
+                projVector.copy(b.targetMesh.position); projVector.y += 1.25; projVector.project(camera);
+                if (projVector.z > 1) { b.div.style.display = 'none'; } else { b.div.style.display = 'block'; b.div.style.left = `${(projVector.x * halfW) + halfW}px`; b.div.style.top = `${-(projVector.y * halfH) + halfH}px`; }
             }
         }
 
         function animate() {
-            requestAnimationFrame(animate);
-            const dt = Math.min(0.05, clock.getDelta());
-
+            requestAnimationFrame(animate); const dt = Math.min(0.05, clock.getDelta());
             let moveInX = input.x + keyInput.x; let moveInY = input.y + keyInput.y;
-            const mag = Math.sqrt(moveInX * moveInX + moveInY * moveInY);
-            if (mag > 1) { moveInX /= mag; moveInY /= mag; }
+            const mag = Math.sqrt(moveInX * moveInX + moveInY * moveInY); if (mag > 1) { moveInX /= mag; moveInY /= mag; }
 
             if (mag > 0.05) {
-                const forwardX = -Math.sin(camYaw), forwardZ = -Math.cos(camYaw);
-                const rightX = Math.cos(camYaw), rightZ = -Math.sin(camYaw);
-                const moveX = rightX * moveInX + forwardX * (-moveInY);
-                const moveZ = rightZ * moveInX + forwardZ * (-moveInY);
-                myPlayer.position.x += moveX * speed * dt;
-                myPlayer.position.z += moveZ * speed * dt;
-                myPlayer.rotation.y = Math.atan2(moveX, moveZ);
+                const forwardX = -Math.sin(camYaw), forwardZ = -Math.cos(camYaw); const rightX = Math.cos(camYaw), rightZ = -Math.sin(camYaw);
+                const moveX = rightX * moveInX + forwardX * (-moveInY); const moveZ = rightZ * moveInX + forwardZ * (-moveInY);
+                myPlayer.position.x += moveX * speed * dt; myPlayer.position.z += moveZ * speed * dt; myPlayer.rotation.y = Math.atan2(moveX, moveZ);
             }
 
-            if (jumpRequested) {
-                if (onGround) { velocityY = JUMP_SPEED; onGround = false; }
-                jumpRequested = false;
-            }
-            velocityY += GRAVITY * dt;
-            myPlayer.position.y += velocityY * dt;
-
+            if (jumpRequested) { if (onGround) { velocityY = JUMP_SPEED; onGround = false; } jumpRequested = false; }
+            velocityY += GRAVITY * dt; myPlayer.position.y += velocityY * dt;
             const surfaceY = groundHeightAt(myPlayer.position.x, myPlayer.position.z) + GROUND_Y;
-            if (myPlayer.position.y <= surfaceY) {
-                myPlayer.position.y = surfaceY; velocityY = 0; onGround = true;
-            }
+            if (myPlayer.position.y <= surfaceY) { myPlayer.position.y = surfaceY; velocityY = 0; onGround = true; }
             if (myPlayer.position.y < -20) { myPlayer.position.set(0, GROUND_Y, 4); velocityY = 0; }
 
-            updateCameraTransform(dt);
-            networkTick(dt);
+            updateCameraTransform(dt); networkTick(dt);
 
+            const now = Date.now();
             Object.values(players).forEach(p => {
                 const t = Math.min(1, dt * 10);
-                p.mesh.position.x += (p.targetX - p.mesh.position.x) * t;
-                p.mesh.position.y += (p.targetY - p.mesh.position.y) * t;
-                p.mesh.position.z += (p.targetZ - p.mesh.position.z) * t;
-                let cur = p.mesh.rotation.y; let diff = p.targetYaw - cur;
-                while (diff > Math.PI) diff -= Math.PI * 2; while (diff < -Math.PI) diff += Math.PI * 2;
-                p.mesh.rotation.y = cur + diff * t;
+                p.mesh.position.x += (p.targetX - p.mesh.position.x) * t; p.mesh.position.y += (p.targetY - p.mesh.position.y) * t; p.mesh.position.z += (p.targetZ - p.mesh.position.z) * t;
+                let cur = p.mesh.rotation.y; let diff = p.targetYaw - cur; while (diff > Math.PI) diff -= Math.PI * 2; while (diff < -Math.PI) diff += Math.PI * 2; p.mesh.rotation.y = cur + diff * t;
             });
 
-            renderer.render(scene, camera);
-            updateBubbles2D(); // Sync HTML bubbles with 3D camera
+            // Clean up AFK / dead connections (5 second timeout)
+            for (const id in players) {
+                if (now - players[id].lastUpdate > 5000) {
+                    if (isHostFlag) { removeHostClient(id); } else { scene.remove(players[id].mesh); delete players[id]; if (activeBubbles[id]) { activeBubbles[id].div.remove(); delete activeBubbles[id]; } }
+                }
+            }
+
+            renderer.render(scene, camera); updateBubbles2D();
         }
 
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        updateCameraTransform();
-        animate();
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+        updateCameraTransform(); animate();
     </script>
 </body>
 </html>
